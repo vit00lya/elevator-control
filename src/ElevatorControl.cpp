@@ -1,26 +1,26 @@
-#include "xserial.hpp"
-#include <iostream>
-#include <string>
-#include <pqxx/pqxx>
+#include "ElevatorControl.h"
 
-using namespace std::literals;
-
-int main(){
-    
-  xserial::ComPort com = xserial::ComPort(0,
-					  9600,
-					  xserial::ComPort::eParity::COM_PORT_NOPARITY,
-					  8,
-					  xserial::ComPort::eStopBit::COM_PORT_ONESTOPBIT,
-					  5,
-					  "ttyACM");
-  std::string in_str = com.getLine();
-
-  if (in_str == "0000000000000"s) {
-      std::cout << "exit"s << std::endl;
-  }
-  
-  std::cout << in_str << std::endl;
-  
-  return 0;
+void elevator_control::ElevatorControl::AddBarcode(std::string& name_product, std::string& barcode){
+       names_products_.push_back(std::move(name_product));
+       barcodes_.push_back(std::move(barcode));
+       std::string_view name_product_sv = barcodes_.back();
+       std::string_view barcode_sv      = names_products_.back();
+       barcode_map_[name_product_sv] = barcode_sv;
 }
+
+void elevator_control::ElevatorControl::Init(std::istream& input_json){
+
+      using namespace std::literals;
+      json::Document doc = json::Load(input_json);
+      json::Dict map = doc.GetRoot().AsMap();
+
+      for(const auto& [key, value]: map){
+        
+
+      }
+
+}
+
+
+
+
