@@ -8,18 +8,20 @@ void elevator_control::ElevatorControl::AddBarcode(std::string& name_product, st
        barcode_map_[name_product_sv] = barcode_sv;
 }
 
-void elevator_control::ElevatorControl::Init(std::istream& input_json){
+std::optional<std::string_view> elevator_control::ElevatorControl::GetName(std::string_view barcode){
 
-      using namespace std::literals;
-      json::Document doc = json::Load(input_json);
-      json::Dict map = doc.GetRoot().AsMap();
-
-      for(const auto& [key, value]: map){
-        
-
-      }
-
+  if (barcode.empty()) {
+    return {};
+  }
+  
+  auto it = barcode_map_.find(barcode);
+  if (it != barcode_map_.end()){
+    return it->second;
+  }
+  
+  return {};
 }
+
 
 
 

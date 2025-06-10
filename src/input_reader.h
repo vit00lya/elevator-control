@@ -9,10 +9,6 @@
 #include <iterator>
 #include <charconv>
 
-#include "domain.h"
-#include "geo.h"
-#include "transport_catalogue.h"
-
 
 namespace input_reader{
 
