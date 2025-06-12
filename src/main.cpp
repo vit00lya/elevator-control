@@ -1,28 +1,28 @@
-#include "xserial.hpp"
 #include <iostream>
 #include <string>
+#include "input_reader.h"
+#include "ElevatorControl.h"
 
 using namespace std::literals;
 
 int main(){
 
-
-
+  elevator_control::ElevatorControl ec;
+  input_reader::InputReader ir;
+  std::string input_string;
   
-  // xserial::ComPort com = xserial::ComPort(0,
-  // 					  9600,
-  // 					  xserial::ComPort::eParity::COM_PORT_NOPARITY,
-  // 					  8,
-  // 					  xserial::ComPort::eStopBit::COM_PORT_ONESTOPBIT,
-  // 					  5,
-  // 					  "ttyACM");
-  // std::string in_str = com.getLine();
+  while(true){
+    
+    std::cin >> input_string;
+    
+    try{
+      std::cout << ir.ParseLine(input_string) << std::endl;
+    }
+    catch(const std::exception& e){
+       std::cerr << e.what() << std::endl;
+    }
+    
+  }
 
-  // if (in_str == "0000000000000"s) {
-  //     std::cout << "exit"s << std::endl;
-  // }
-  
-  // std::cout << in_str << std::endl;
-  
   return 0;
 }

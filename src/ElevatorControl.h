@@ -3,13 +3,18 @@
 #include <string>
 #include <string_view>
 #include <deque>
-#include <sstream>
 #include <optional>
-#include "json.h"
-
+#include <chrono>
+#include <vector>
 
 namespace elevator_control{
 
+  struct TransportPacket{
+    long id;
+    std::chrono::time_point<std::chrono::system_clock> time_point;
+    std::vector<std::string> array_barcodes;
+  };
+  
     struct HasherBarcode {
     public:
         size_t operator()(const std::string_view& name) const {
@@ -29,7 +34,7 @@ namespace elevator_control{
     
     ElevatorControl() = default;
     void AddBarcode(std::string& name_product, std::string& barcode);
-    std::optional<std::string_view> GetName(std::string_view barcode);
+    std::optional<std::string_view> GetNameProduct(std::string_view barcode);
     
   private:
     std::deque<std::string> names_products_;
@@ -37,6 +42,7 @@ namespace elevator_control{
     std::unordered_map<std::string_view, std::string_view, HasherBarcode> barcode_map_;
     std::vector<std::string> barcodes_to_send_;
     Settings settings_;
+    long transport_packet_id_;
 
   };
 }
