@@ -7,8 +7,8 @@ set(TARGET ElevatorControl)
 list(APPEND SOURCES
 	src/xserial.cpp
         src/xserial.hpp
-	src/ElevatorControl.cpp
-	src/ElevatorControl.h
+	src/elevator_control.cpp
+	src/elevator_control.h
 	src/input_reader.cpp
 	src/input_reader.h
 	src/main.cpp)
