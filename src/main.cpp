@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include "input_reader.h"
-#include "ElevatorControl.h"
+#include "elevator_control.h"
 
 using namespace std::literals;
 
