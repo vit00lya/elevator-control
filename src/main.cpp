@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include <string_view>
+#include <optional>
 #include "input_reader.h"
 #include "elevator_control.h"
 
@@ -14,13 +16,19 @@ int main(){
   while(true){
     
     std::cin >> input_string;
-    
+
     try{
-      std::cout << ir.ParseLine(input_string) << std::endl;
+      std::optional<std::string_view> name_product = ir.ParseLine(input_string);
+
+      if(name_product.has_value()){
+	std::cout << name_product.value() << std::endl;
+      }
+
     }
-    catch(const std::exception& e){
+      catch(const std::exception& e){
        std::cerr << e.what() << std::endl;
     }
+  
     
   }
 
