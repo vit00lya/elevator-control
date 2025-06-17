@@ -3,12 +3,8 @@
 #include <string>
 #include "json.h"
 #include <fstream>
-#include "domain.h"
 #include <memory>
 #include <sstream>
-#include "map_renderer.h"
-#include "json_builder.h"
-#include "transport_router.h"
 #include <optional>
 
 namespace jsonreader
