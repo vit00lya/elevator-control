@@ -11,6 +11,12 @@ list(APPEND SOURCES
 	src/elevator_control.h
 	src/input_reader.cpp
 	src/input_reader.h
+	src/json_reader.h
+	src/json_reader.cpp
+	src/json.h
+	src/json.cpp
+	src/json_builder.cpp
+	src/json_builder.h
 	src/main.cpp)
 
 add_executable(${TARGET} ${SOURCES})

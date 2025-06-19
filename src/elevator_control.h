@@ -6,12 +6,13 @@
 #include <optional>
 #include <chrono>
 #include <vector>
+#include <fstream>
 
 namespace elevator_control{
 
   struct TransportPacket{
     long id;
-    std::chrono::time_point<std::chrono::system_clock> time_point;
+    std::string time_point;
     std::vector<std::string> array_barcodes;
   };
   
@@ -35,6 +36,11 @@ namespace elevator_control{
     ElevatorControl() = default;
     void AddBarcode(std::string& name_product, std::string& barcode);
     std::optional<std::string_view> GetNameProduct(std::string_view barcode);
+    void AddBarcodeToSend(std::string& barcode);
+    long GetTransportPacketId();
+    long IncTrasportPacketId();
+    std::vector<std::string> GetBarcodesToSend();
+ 
     
   private:
     std::deque<std::string> names_products_;

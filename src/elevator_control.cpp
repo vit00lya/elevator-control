@@ -1,6 +1,8 @@
 #include "elevator_control.h"
 
-void elevator_control::ElevatorControl::AddBarcode(std::string& name_product, std::string& barcode){
+using namespace elevator_control;
+
+void ElevatorControl::AddBarcode(std::string& name_product, std::string& barcode){
        names_products_.push_back(std::move(name_product));
        barcodes_.push_back(std::move(barcode));
        std::string_view name_product_sv = barcodes_.back();
@@ -8,7 +10,11 @@ void elevator_control::ElevatorControl::AddBarcode(std::string& name_product, st
        barcode_map_[name_product_sv] = barcode_sv;
 }
 
-std::optional<std::string_view> elevator_control::ElevatorControl::GetNameProduct(std::string_view barcode){
+void ElevatorControl::AddBarcodeToSend(std::string& barcode){
+     barcodes_to_send_.push_back(std::move(barcode));
+} 
+
+std::optional<std::string_view> ElevatorControl::GetNameProduct(std::string_view barcode){
 
   if (barcode.empty()) {
     return {};

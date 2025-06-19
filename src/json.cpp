@@ -231,8 +231,8 @@ Node LoadNode(istream& input) {
         } else if ((c == 't' && c1 == 'r') || (c == 'f' && c1 == 'a')){
             return LoadBool(input, c);
         } else {
-            input.putback(c);
-            return LoadInt(input);
+	   input.putback(c);
+           return LoadInt(input);
         }
     }
     return Node(nullptr);
