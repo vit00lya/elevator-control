@@ -250,6 +250,9 @@ Node::Node(Dict map)
 Node::Node(int value)
     : data_(value) {}
 
+Node::Node(long value)
+    : data_(value) {}
+
 Node::Node(string value)
     : data_(move(value)) {}
 
@@ -316,6 +319,15 @@ const string& Node::AsString() const {
      }
 }
 
+  long Node::AsLong() const {
+    if (const long* pval = std::get_if<long>(&data_)){ 
+         return *pval;
+     }
+     else{
+         throw std::logic_error("Ошибка, элемент JSON не является int"s);
+     }
+}
+
 double Node::AsDouble() const {
     if (const double* pval = std::get_if<double>(&data_)){
          return *pval;
@@ -342,6 +354,11 @@ bool Node::AsBool() const {
 bool Node::IsInt() const{
 
     return (std::get_if<int>(&data_));
+}
+
+  bool Node::IsLong() const{
+
+    return (std::get_if<long>(&data_));
 }
 
 bool Node::IsDouble() const{
@@ -404,6 +421,10 @@ void PrintValue(std::string val, std::ostream& out) {
 }
 
 void PrintValue(double val, std::ostream& out) {
+    out << val;
+}
+
+ void PrintValue(long val, std::ostream& out) {
     out << val;
 }
 

@@ -25,30 +25,38 @@ void JsonReader::FilligBarcodes(const std::string& path_input_json, elevator_con
 	ec.AddBarcode(name_product, barcode);
 	
       }
-      }
+}
 
-
-void JsonReader::SaveTransportPackage(elevator_control::ElevatorControl ec){
-
-   using namespace std::literals;
+// Возвращает имя создаваемого пакета
+std::string JsonReader::SaveTransportPackage(elevator_control::ElevatorControl& ec){ 
+ 
+  using namespace std::literals;
   std::chrono::time_point<std::chrono::system_clock> time = std::chrono::system_clock::now();
   time_t now_t = std::chrono::system_clock::to_time_t(time);
 
   std::ofstream out;
-  out.open("tranport_package_" + std::to_string(ec.GetTransportPacketId()) + "_" + std::to_string(now_t) + ".txt");
+  out.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+  auto name_file = "tranport_package_" + std::to_string(ec.GetTransportPacketId()) + "_" + std::to_string(now_t) + ".json";
+  out.open(name_file);
 
+  // Заполнение пакета
   elevator_control::TransportPacket tp;
   
   tp.id = ec.GetTransportPacketId();
   tp.time_point = std::to_string(now_t);
   tp.array_barcodes = std::move(ec.GetBarcodesToSend());
 
-  // auto result = json::Builder{}.StartDict() 
-  //   .Key("request_id"s).Value(elem.AsMap().at("id").AsInt())
-  //   .Key("map"s).Value(os.str())
-  //   .EndDict().Build();
+  std::vector<Node> tmp_v {tp.array_barcodes.begin(), tp.array_barcodes.end()};
 
-  //  json::Document doc = json::Document(result);
-  //  json::Print(doc, out);
-  
+  //Создание JSON файла
+   auto result = json::Builder{}.StartDict() 
+     .Key("id"s).Value(tp.id)
+     .Key("time_point"s).Value(tp.time_point)
+     .Key("array_barcodes").Value(tmp_v).EndDict().Build(); 
+
+    json::Document doc = json::Document(result);
+    json::Print(doc, out);
+
+    return name_file;
+    
 }

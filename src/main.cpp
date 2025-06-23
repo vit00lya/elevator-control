@@ -36,7 +36,18 @@ int main(){
     try{
       barcode = ir.ParseLine(input_string);
       if(barcode == "0000000000000"){
-	std::cout << "Транспортный пакет записан"s << "\n";
+	if(ec.EmptyBarcodesToSend()){
+	  std::cout << "Список пуст, нечего отправлять."s <<  "\n";
+	  continue;
+	}
+	try
+	  {
+           std::string name_pack = jr.SaveTransportPackage(ec);
+	   std::cout << "Транспортный пакет записан. Имя пакета:"s << name_pack << "\n";
+	  }
+	catch(...){ 
+	   std::cerr << "Ошибка при записи транспортного пакета"s << std::endl;
+	}
       }
       else{
 	std::optional<std::string_view> name_product = ec.GetNameProduct(barcode);

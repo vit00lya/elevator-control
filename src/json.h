@@ -20,7 +20,7 @@ public:
     using runtime_error::runtime_error;
 };
 
-class Node final : private std::variant<std::nullptr_t, Array, Dict, bool, int, double, std::string>  {
+  class Node final : private std::variant<std::nullptr_t, Array, Dict, bool, int, double, long, std::string>  {
 public:
 
     using variant::variant;
@@ -31,6 +31,7 @@ public:
     Node(std::string value);
     Node(double value);
     Node(std::nullptr_t);
+    Node(long);
     Node(bool);
 
     Array& AsArray();
@@ -39,11 +40,13 @@ public:
     const Array& AsArray() const;
     const Dict& AsMap() const;
     int AsInt() const;
+    long AsLong() const;
     double AsDouble() const;
     bool AsBool() const;
     const std::string& AsString() const;
 
     bool IsInt() const;
+    bool IsLong() const;
     bool IsDouble() const;
     bool IsPureDouble() const;
     bool IsBool() const;
@@ -88,6 +91,7 @@ void PrintValue(std::nullptr_t, std::ostream& out);
 void PrintValue(std::string val, std::ostream& out);
 void PrintValue(double val, std::ostream& out);
 void PrintValue(int val, std::ostream& out);
+void PrintValue(long val, std::ostream& out);
 void PrintValue(const Dict &val, std::ostream& out);
 void PrintValue(bool val, std::ostream& out);
 void PrintValue(const Array &val, std::ostream& out);
