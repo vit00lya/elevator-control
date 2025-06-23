@@ -12,7 +12,23 @@ void ElevatorControl::AddBarcode(std::string& name_product, std::string& barcode
 
 void ElevatorControl::AddBarcodeToSend(std::string& barcode){
      barcodes_to_send_.push_back(std::move(barcode));
-} 
+}
+
+long ElevatorControl::GetTransportPacketId(){
+  return transport_packet_id_;
+}
+
+void ElevatorControl::IncTrasportPacketId(){
+  ++transport_packet_id_; 
+}
+
+bool ElevatorControl::EmptyBarcodesToSend(){
+  return barcodes_to_send_.empty();
+}
+
+std::vector<std::string> ElevatorControl::GetBarcodesToSend(){
+  return barcodes_to_send_;
+}
 
 std::optional<std::string_view> ElevatorControl::GetNameProduct(std::string_view barcode){
 
