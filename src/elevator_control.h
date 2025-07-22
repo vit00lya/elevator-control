@@ -38,7 +38,7 @@ namespace elevator_control{
     std::optional<std::string_view> GetNameProduct(std::string_view barcode);
     void AddBarcodeToSend(std::string& barcode);
     long GetTransportPacketId();
-    long IncTrasportPacketId();
+    void IncTrasportPacketId();
     bool EmptyBarcodesToSend();
     std::vector<std::string> GetBarcodesToSend();
  
