@@ -30,6 +30,14 @@ std::vector<std::string> ElevatorControl::GetBarcodesToSend(){
   return barcodes_to_send_;
 }
 
+void ElevatorControl::SaveSettings(Settings& settings){
+  settings_ = std::move(settings);
+}
+
+Settings ElevatorControl::GetSettings(){
+  return settings_;
+}
+
 std::optional<std::string_view> ElevatorControl::GetNameProduct(std::string_view barcode){
 
   if (barcode.empty()) {

@@ -41,6 +41,8 @@ namespace elevator_control{
     void IncTrasportPacketId();
     bool EmptyBarcodesToSend();
     std::vector<std::string> GetBarcodesToSend();
+    void SaveSettings(Settings& settings);
+    Settings GetSettings();
  
     
   private:

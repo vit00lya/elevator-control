@@ -27,6 +27,33 @@ void JsonReader::FilligBarcodes(const std::string& path_input_json, elevator_con
       }
 }
 
+void JsonReader::LoadSettings(elevator_control::ElevatorControl& ec){
+      using namespace std::literals;
+
+      std::ifstream input_json;
+      try{
+	input_json.open("settings.json", std::ios::binary);
+      }
+      catch(...){
+	
+	throw "Не возможно прочитать файл настроек settings.json"s;
+
+      } 
+      
+      elevator_control::Settings setiings;
+      
+      json::Document doc = json::Load(input_json);
+      json::Dict dict = doc.GetRoot().AsMap();
+	for(const auto& [key, value]: dict.AsMap()){
+	  if(key == "path_exchange_file"s){
+	    setiings.path_exchange_file = value.AsString();
+	  }
+      }
+
+     ec.settings
+	
+}
+
 // Возвращает имя создаваемого пакета
 std::string JsonReader::SaveTransportPackage(elevator_control::ElevatorControl& ec){ 
  
