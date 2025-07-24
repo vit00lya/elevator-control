@@ -2,11 +2,11 @@
 
 using namespace jsonreader;
 
-void JsonReader::FilligBarcodes(const std::string& path_input_json, elevator_control::ElevatorControl& ec){
+void JsonReader::FilligBarcodes(elevator_control::ElevatorControl& ec){
       using namespace std::literals;
 
       std::ifstream input_json;
-      input_json.open(path_input_json, std::ios::binary);
+      input_json.open(ec.GetSettings().path_exchange_file, std::ios::binary);
       
       json::Document doc = json::Load(input_json);
       json::Array arr = doc.GetRoot().AsArray();
@@ -33,25 +33,26 @@ void JsonReader::LoadSettings(elevator_control::ElevatorControl& ec){
       std::ifstream input_json;
       try{
 	input_json.open("settings.json", std::ios::binary);
+	if (!input_json.good()) {
+	   std::cerr << "Не возможно прочитать файл настроек settings.json" << std::endl;
+	   throw ;
+	}
       }
       catch(...){
-	
-	throw "Не возможно прочитать файл настроек settings.json"s;
-
+	std::cerr << "Не возможно прочитать файл настроек settings.json" << std::endl;
+	throw ;
       } 
       
-      elevator_control::Settings setiings;
+      elevator_control::Settings settings;
       
       json::Document doc = json::Load(input_json);
       json::Dict dict = doc.GetRoot().AsMap();
-	for(const auto& [key, value]: dict.AsMap()){
+	for(const auto& [key, value]: dict){
 	  if(key == "path_exchange_file"s){
-	    setiings.path_exchange_file = value.AsString();
+	    settings.path_exchange_file = value.AsString();
 	  }
       }
-
-     ec.settings
-	
+      ec.SaveSettings(settings);	
 }
 
 // Возвращает имя создаваемого пакета
@@ -83,6 +84,8 @@ std::string JsonReader::SaveTransportPackage(elevator_control::ElevatorControl& 
 
     json::Document doc = json::Document(result);
     json::Print(doc, out);
+
+    ec.IncTrasportPacketId();
 
     return name_file;
     

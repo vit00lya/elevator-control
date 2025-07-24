@@ -12,7 +12,7 @@ namespace input_reader {
 
   std::string result = ""s;
   
-  if(line[0] == '2'){
+  if(line[0] == '2' || line[0] == '9' ){
     for (size_t i = 0; i < 13 ; ++i)
       {
 	result.push_back(line[i]);

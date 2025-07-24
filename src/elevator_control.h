@@ -51,7 +51,7 @@ namespace elevator_control{
     std::unordered_map<std::string_view, std::string_view, HasherBarcode> barcode_map_;
     std::vector<std::string> barcodes_to_send_;
     Settings settings_;
-    long transport_packet_id_;
+    long transport_packet_id_ = 0;
 
   };
 }

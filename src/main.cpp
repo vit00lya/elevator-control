@@ -13,17 +13,17 @@ int main(){
   elevator_control::ElevatorControl ec;
   input_reader::InputReader ir;
   jsonreader::JsonReader jr;
+  
+  jr.LoadSettings(ec);
+  
+  try{
+    jr.FilligBarcodes(ec);
+  }
 
-
-  try 
-    {
-      jr.FilligBarcodes("barcode.json"s, ec);
-    }
-
-    catch(...){
-       std::cerr << "Не возможно прочитать штрихкоды, возможно не верная кодировка файла barcode.json"s << std::endl;
-       return 1;
-    }
+  catch(...){
+     std::cerr << "Не возможно прочитать штрихкоды, возможно не верная кодировка файла barcode.json"s << std::endl;
+     return 1;
+  }
   
   std::string input_string;
   std::string barcode;
@@ -35,7 +35,7 @@ int main(){
 
     try{
       barcode = ir.ParseLine(input_string);
-      if(barcode == "0000000000000"){
+      if(barcode == "9999999999999"s){
 	if(ec.EmptyBarcodesToSend()){
 	  std::cout << "Список пуст, нечего отправлять."s <<  "\n";
 	  continue;
@@ -54,8 +54,11 @@ int main(){
 
 	if(name_product.has_value()){
 	  std::cout << name_product.value() << std::endl;
-	  ec.AddBarcodeToSend(barcode);
 	}
+	else{
+	  std::cout << "Неопознанный штрихкод"s << std::endl;
+	}
+	 ec.AddBarcodeToSend(barcode);
       }
     }
       catch(const std::exception& e){

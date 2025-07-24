@@ -17,7 +17,7 @@ namespace jsonreader
     class JsonReader{
     public:
         JsonReader() = default;
-        void FilligBarcodes(const std::string& path_input_json, elevator_control::ElevatorControl& ec);
+        void FilligBarcodes(elevator_control::ElevatorControl& ec);
         void LoadSettings(elevator_control::ElevatorControl& ec);
         std::string SaveTransportPackage(elevator_control::ElevatorControl& ec);
     };
