@@ -5,6 +5,7 @@
 #include "input_reader.h"
 #include "elevator_control.h"
 #include "json_reader.h"
+#include "xserial.hpp"
 
 using namespace std::literals;
 

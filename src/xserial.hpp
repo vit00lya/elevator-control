@@ -37,6 +37,7 @@
 #include <vector>
 #include <sstream>
 #include <chrono>
+#include <thread>
 
 using TimePoint = typename std::chrono::steady_clock::time_point;
 using Duration = typename std::chrono::steady_clock::duration;

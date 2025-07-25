@@ -28,6 +28,13 @@ namespace elevator_control{
 
    struct Settings{
      std::string path_exchange_file;
+     std::string scanner_enable = "";
+     std::string scanner_num_com_port = "";
+     std::string scanner_baud_rate = "";
+     std::string scanner_parity = "";
+     std::string scanner_data_bits = "";
+     std::string scanner_stop_bits = "";
+     std::string scanner_linux_com_port = "";
         };
   
   class ElevatorControl{

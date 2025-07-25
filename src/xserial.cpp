@@ -806,6 +806,7 @@ namespace xserial {
 		      if(countdownIsOver(start_time, timeout_)){
 		       return "timeout";
 		      }
+		    std::this_thread::sleep_for(std::chrono::milliseconds(50));
                 }
                 // считаем 1 байт
                 int iOut = ::read(hComPort, &data, 1);

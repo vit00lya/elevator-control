@@ -51,6 +51,27 @@ void JsonReader::LoadSettings(elevator_control::ElevatorControl& ec){
 	  if(key == "path_exchange_file"s){
 	    settings.path_exchange_file = value.AsString();
 	  }
+	   else if(key == "scanner_enable"){
+	    settings.scanner_enable = value.AsString();
+	  }
+	  else if(key == "scanner_num_com_port"){
+	    settings.scanner_num_com_port = value.AsString();
+	  }
+	  else if(key == "scanner_baud_rate"){
+	    settings.scanner_baud_rate = value.AsString();
+	  }
+	  else if(key == "scanner_parity"){
+	    settings.scanner_parity = value.AsString();
+	  }
+	  else if(key == "scanner_data_bits"){
+	    settings.scanner_data_bits = value.AsString();
+	  }
+	  else if(key == "scanner_stop_bits"){
+	    settings.scanner_stop_bits = value.AsString();
+	  }
+	  else if(key == "scanner_linux_com_port"){
+	    settings.scanner_linux_com_port = value.AsString();
+	  }
       }
       ec.SaveSettings(settings);	
 }
