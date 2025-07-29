@@ -149,7 +149,7 @@ namespace xserial {
         @param[in] numComPort номер порта
         @param[in] baudRate скорость
         @param[in] parity настройка проверки четности
-        @param[in] dataBits количесвто бит данных
+        @param[in] dataBits количество бит данных
         @param[in] stopBits настройка количества стоп битов
 	@param[in] timeout  настройка прерывания при чтении строки
         */

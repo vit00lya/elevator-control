@@ -1,3 +1,10 @@
 {
-    "path_exchange_file":"/home/vitasan/git/elevator-control/test/barcode.json"
+    "path_exchange_file":"/home/vitasan/git/elevator-control/test/barcode.json",
+    "scanner_enable":true,
+    "scanner_num_com_port":0,
+    "scanner_baud_rate":9600,
+    "scanner_parity":"COM_PORT_NOPARITY",
+    "scanner_data_bits":8,
+    "scanner_stop_bits":"COM_PORT_ONESTOPBIT",
+    "scanner_linux_com_port":"ttyACM"
 }

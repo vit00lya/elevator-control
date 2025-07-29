@@ -52,19 +52,19 @@ void JsonReader::LoadSettings(elevator_control::ElevatorControl& ec){
 	    settings.path_exchange_file = value.AsString();
 	  }
 	   else if(key == "scanner_enable"){
-	    settings.scanner_enable = value.AsString();
+	     settings.scanner_enable = value.AsBool();
 	  }
 	  else if(key == "scanner_num_com_port"){
-	    settings.scanner_num_com_port = value.AsString();
+	    settings.scanner_num_com_port = value.AsInt();
 	  }
 	  else if(key == "scanner_baud_rate"){
-	    settings.scanner_baud_rate = value.AsString();
+	    settings.scanner_baud_rate = value.AsInt();
 	  }
 	  else if(key == "scanner_parity"){
 	    settings.scanner_parity = value.AsString();
 	  }
 	  else if(key == "scanner_data_bits"){
-	    settings.scanner_data_bits = value.AsString();
+	    settings.scanner_data_bits = value.AsInt();
 	  }
 	  else if(key == "scanner_stop_bits"){
 	    settings.scanner_stop_bits = value.AsString();

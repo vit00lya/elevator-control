@@ -5,17 +5,31 @@
 #include "input_reader.h"
 #include "elevator_control.h"
 #include "json_reader.h"
-#include "xserial.hpp"
+#include "xserial.hpp" 
+#include "magic_enum.hpp" 
 
 using namespace std::literals;
 
 int main(){
 
   elevator_control::ElevatorControl ec;
-  input_reader::InputReader ir;
-  jsonreader::JsonReader jr;
+  input_reader::InputReader         ir;
+  jsonreader::JsonReader            jr;
   
   jr.LoadSettings(ec);
+
+  elevator_control::Settings settings;
+  settings = ec.GetSettings();
+    
+  if(settings.scanner_enable){
+    xserial::ComPort scanner((short)settings.scanner_num_com_port,
+			     (long)settings.scanner_baud_rate,
+			     magic_enum::enum_cast<xserial::ComPort::eParity>(settings.scanner_parity).value(),
+			     (long)settings.scanner_data_bits,
+   		             magic_enum::enum_cast<xserial::ComPort::eStopBit>(settings.scanner_stop_bits).value(),
+			     0,
+			     settings.scanner_linux_com_port); 
+  }
   
   try{
     jr.FilligBarcodes(ec);
