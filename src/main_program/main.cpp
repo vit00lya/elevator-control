@@ -15,6 +15,7 @@ int main(){
   elevator_control::ElevatorControl ec;
   input_reader::InputReader         ir;
   jsonreader::JsonReader            jr;
+  xserial::ComPort                 scanner; 
   
   jr.LoadSettings(ec);
 
@@ -22,13 +23,15 @@ int main(){
   settings = ec.GetSettings();
     
   if(settings.scanner_enable){
-    xserial::ComPort scanner((short)settings.scanner_num_com_port,
+    if (!scanner.open((short)settings.scanner_num_com_port,
 			     (long)settings.scanner_baud_rate,
 			     magic_enum::enum_cast<xserial::ComPort::eParity>(settings.scanner_parity).value(),
 			     (long)settings.scanner_data_bits,
    		             magic_enum::enum_cast<xserial::ComPort::eStopBit>(settings.scanner_stop_bits).value(),
 			     0,
-			     settings.scanner_linux_com_port); 
+		      settings.scanner_linux_com_port)){
+       return 1;
+    }
   }
   
   try{
@@ -46,7 +49,15 @@ int main(){
   while(true){
 
     std::cout << "Готов"s << "\n";
-    std::cin >> input_string;
+    input_string = "";
+    if(settings.scanner_enable){
+      input_string = scanner.getLine();
+      scanner.flushRxAndTx();
+    }
+    else
+    {
+      std::cin >> input_string;
+    }
 
     try{
       barcode = ir.ParseLine(input_string);
