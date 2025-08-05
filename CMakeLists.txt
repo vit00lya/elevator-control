@@ -18,6 +18,15 @@ list(APPEND SOURCES
 	src/json_builder.cpp
 	src/json_builder.h
 	src/magic_enum.hpp
-	src/main.cpp)
+	src/main.cpp
+	src/neon/memleak.h
+	src/neon/mktable.c
+	src/neon/ne_207.c
+	src/neon/ne_207.h
+	src/neon/ne_acl.h
+	src/neon/ne_acl3744.c
+	src/neon/ne_acl3744.h
+	src/neon/ne_alloc.c
+	src/neon/ne_alloc.h)
 
 add_executable(${TARGET} ${SOURCES})
