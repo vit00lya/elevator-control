@@ -8,6 +8,329 @@
 		(date "15 nov 2012")
 	)
 	(lib_symbols
+		(symbol "Connector:Conn_01x02_Socket"
+			(pin_names
+				(offset 1.016) hide)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "J"
+				(at 0 2.54 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "Conn_01x02_Socket"
+				(at 0 -5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Generic connector, single row, 01x02, script generated"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_locked" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "connector"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "Connector*:*_1x??_*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Conn_01x02_Socket_1_1"
+				(arc
+					(start 0 -2.032)
+					(mid -0.5058 -2.54)
+					(end 0 -3.048)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.27 -2.54) (xy -0.508 -2.54)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.27 0) (xy -0.508 0)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start 0 0.508)
+					(mid -0.5058 0)
+					(end 0 -0.508)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at -5.08 0 0)
+					(length 3.81)
+					(name "Pin_1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -5.08 -2.54 0)
+					(length 3.81)
+					(name "Pin_2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
+		(symbol "Device:R_Potentiometer"
+			(pin_names
+				(offset 1.016) hide)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "RV"
+				(at -4.445 0 90)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "R_Potentiometer"
+				(at -2.54 0 90)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Potentiometer"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "resistor variable"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "Potentiometer*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "R_Potentiometer_0_1"
+				(polyline
+					(pts
+						(xy 2.54 0) (xy 1.524 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.143 0) (xy 2.286 0.508) (xy 2.286 -0.508) (xy 1.143 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(rectangle
+					(start 1.016 2.54)
+					(end -1.016 -2.54)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "R_Potentiometer_1_1"
+				(pin passive line
+					(at 0 3.81 270)
+					(length 1.27)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 3.81 0 180)
+					(length 1.27)
+					(name "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 1.27)
+					(name "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
 		(symbol "Melt:MT-12864J-2VLW-3V0"
 			(pin_names
 				(offset 1.016)
@@ -444,6 +767,208 @@
 						)
 					)
 					(number "9"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
+		(symbol "Other:2SC1815"
+			(pin_names
+				(offset 0) hide)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "Q"
+				(at 5.08 1.905 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "2sc3205"
+				(at 5.08 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" "Package_TO_SOT_THT:TO-92_Inline"
+				(at 5.08 -1.905 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+						(italic yes)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "https://alltransistors.com/ru/adv/pdfview.php?doc=2sc3209.pdf&dire=_nec"
+				(at -35.052 -17.272 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+					(hide yes)
+				)
+			)
+			(property "Description" "2A Ic, 30V Vce, Low Noise Audio NPN Transistor, TO-92"
+				(at 4.826 17.018 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "Low Noise Audio NPN Transistor"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "TO?92*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "2SC1815_0_1"
+				(polyline
+					(pts
+						(xy 0 0) (xy 0.508 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.635 0.635) (xy 2.54 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.635 -0.635) (xy 2.54 -2.54) (xy 2.54 -2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.635 1.905) (xy 0.635 -1.905) (xy 0.635 -1.905)
+					)
+					(stroke
+						(width 0.508)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 -1.778) (xy 1.778 -1.27) (xy 2.286 -2.286) (xy 1.27 -1.778) (xy 1.27 -1.778)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+				(circle
+					(center 1.27 0)
+					(radius 2.8194)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "2SC1815_1_1"
+				(pin passive line
+					(at 2.54 -5.08 90)
+					(length 2.54)
+					(name "E"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 2.54 5.08 270)
+					(length 2.54)
+					(name "C"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -5.08 0 0)
+					(length 5.08)
+					(name "B"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -1256,208 +1781,24 @@
 				)
 			)
 		)
-		(symbol "Transistor_BJT:2SC1815"
-			(pin_names
-				(offset 0) hide)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "Q"
-				(at 5.08 1.905 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "Value" "2SC1815"
-				(at 5.08 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-				)
-			)
-			(property "Footprint" "Package_TO_SOT_THT:TO-92_Inline"
-				(at 5.08 -1.905 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-						(italic yes)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Datasheet" "https://media.digikey.com/pdf/Data%20Sheets/Toshiba%20PDFs/2SC1815.pdf"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(justify left)
-					(hide yes)
-				)
-			)
-			(property "Description" "0.15A Ic, 50V Vce, Low Noise Audio NPN Transistor, TO-92"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_keywords" "Low Noise Audio NPN Transistor"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "ki_fp_filters" "TO?92*"
-				(at 0 0 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(symbol "2SC1815_0_1"
-				(polyline
-					(pts
-						(xy 0 0) (xy 0.508 0)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0.635 0.635) (xy 2.54 2.54)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0.635 -0.635) (xy 2.54 -2.54) (xy 2.54 -2.54)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0.635 1.905) (xy 0.635 -1.905) (xy 0.635 -1.905)
-					)
-					(stroke
-						(width 0.508)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 1.27 -1.778) (xy 1.778 -1.27) (xy 2.286 -2.286) (xy 1.27 -1.778) (xy 1.27 -1.778)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type outline)
-					)
-				)
-				(circle
-					(center 1.27 0)
-					(radius 2.8194)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "2SC1815_1_1"
-				(pin passive line
-					(at 2.54 -5.08 90)
-					(length 2.54)
-					(name "E"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin passive line
-					(at 2.54 5.08 270)
-					(length 2.54)
-					(name "C"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin input line
-					(at -5.08 0 0)
-					(length 5.08)
-					(name "B"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-		)
+	)
+	(junction
+		(at 135.89 85.09)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "0ab11836-94dd-45a2-ac55-5063b6e3f457")
+	)
+	(junction
+		(at 105.41 114.3)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "4be5132d-71d2-42c1-ad40-e24269d8434e")
+	)
+	(junction
+		(at 158.75 48.26)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "5570c7de-3072-4b49-8661-792a2f86c947")
 	)
 	(junction
 		(at 181.61 114.3)
@@ -1466,16 +1807,64 @@
 		(uuid "62ed4fee-e42c-46bc-a484-5068ba7e5777")
 	)
 	(junction
+		(at 154.94 95.25)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "7f9f2cb4-7d66-4ec0-839b-96154fde452f")
+	)
+	(junction
+		(at 215.9 43.18)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "815cb3e8-5b3f-4bde-a3ed-b5b8a9e9a7fe")
+	)
+	(junction
+		(at 222.25 43.18)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "b3b359f4-2137-4433-b70e-bc94e8cfab0b")
+	)
+	(junction
+		(at 170.18 95.25)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "c65adcc6-6d54-4a34-bd50-a9207b414a09")
+	)
+	(junction
+		(at 151.13 22.86)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "ca2095ee-44b2-42c6-ab81-34b28fe5aafa")
+	)
+	(junction
+		(at 181.61 96.52)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "cd5f923d-c9bc-4599-b937-c7c89634e5f8")
+	)
+	(junction
 		(at 123.19 114.3)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "d4bf58ec-3e68-45b2-a26a-579e171af23f")
 	)
 	(junction
-		(at 189.23 48.26)
+		(at 222.25 22.86)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "e86a999d-6125-4361-ba05-13032884ccf7")
+		(uuid "d595ca8a-a086-4310-8761-fb28a39f6ce5")
+	)
+	(junction
+		(at 215.9 29.21)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "dd2718ab-1032-498e-aa77-a11189bf8727")
+	)
+	(junction
+		(at 227.33 22.86)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f93f612d-ca58-4f91-baf0-de85f18c7836")
 	)
 	(wire
 		(pts
@@ -1539,13 +1928,23 @@
 	)
 	(wire
 		(pts
-			(xy 123.19 48.26) (xy 189.23 48.26)
+			(xy 123.19 48.26) (xy 158.75 48.26)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "08cc51f4-8fbb-4dc2-a680-a2c24644df57")
+	)
+	(wire
+		(pts
+			(xy 257.81 87.63) (xy 262.89 87.63)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "08fa7fbf-001c-4e47-b45e-627be984c962")
 	)
 	(wire
 		(pts
@@ -1556,6 +1955,16 @@
 			(type default)
 		)
 		(uuid "0cd196fd-5629-46d1-bdc1-2b845781beaa")
+	)
+	(wire
+		(pts
+			(xy 227.33 22.86) (xy 228.6 22.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0d09d962-759c-448c-85dc-d57cc90a581b")
 	)
 	(wire
 		(pts
@@ -1599,6 +2008,16 @@
 	)
 	(wire
 		(pts
+			(xy 222.25 20.32) (xy 222.25 22.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "156e6589-b277-4995-b120-6121cfcab8d9")
+	)
+	(wire
+		(pts
 			(xy 99.06 95.25) (xy 110.49 95.25)
 		)
 		(stroke
@@ -1619,6 +2038,16 @@
 	)
 	(wire
 		(pts
+			(xy 222.25 43.18) (xy 215.9 43.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "193f52b6-f1a8-455a-8dc4-6ec7c39cf2cd")
+	)
+	(wire
+		(pts
 			(xy 144.78 76.2) (xy 144.78 105.41)
 		)
 		(stroke
@@ -1629,6 +2058,16 @@
 	)
 	(wire
 		(pts
+			(xy 154.94 95.25) (xy 154.94 33.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1cc01a9f-7f41-45e4-a99e-1f15d32ffb5b")
+	)
+	(wire
+		(pts
 			(xy 96.52 63.5) (xy 96.52 97.79)
 		)
 		(stroke
@@ -1636,6 +2075,16 @@
 			(type default)
 		)
 		(uuid "1ce2beaf-f983-4316-ad8a-823ff16bbd26")
+	)
+	(wire
+		(pts
+			(xy 132.08 30.48) (xy 132.08 19.05)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1f3b394e-1810-4f46-8907-09fe029bc7be")
 	)
 	(wire
 		(pts
@@ -1659,6 +2108,16 @@
 	)
 	(wire
 		(pts
+			(xy 151.13 22.86) (xy 146.05 22.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2955c6ea-8874-4f86-aebf-443f5af03063")
+	)
+	(wire
+		(pts
 			(xy 107.95 55.88) (xy 107.95 90.17)
 		)
 		(stroke
@@ -1669,6 +2128,16 @@
 	)
 	(wire
 		(pts
+			(xy 170.18 95.25) (xy 154.94 95.25)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "324258a6-5a00-4bbb-8137-6dd816f35e5e")
+	)
+	(wire
+		(pts
 			(xy 90.17 71.12) (xy 90.17 105.41)
 		)
 		(stroke
@@ -1676,6 +2145,56 @@
 			(type default)
 		)
 		(uuid "32b5684b-6492-44b9-b039-9e59d44521d0")
+	)
+	(wire
+		(pts
+			(xy 154.94 33.02) (xy 146.05 33.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "32f22b1f-b57d-4a5c-898e-32593b7678d9")
+	)
+	(wire
+		(pts
+			(xy 193.04 96.52) (xy 181.61 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "340aa515-558d-4a14-8c7d-65803126617a")
+	)
+	(wire
+		(pts
+			(xy 193.04 33.02) (xy 193.04 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "361c3fe8-87af-47b9-89bc-920cfaa745c2")
+	)
+	(wire
+		(pts
+			(xy 170.18 20.32) (xy 222.25 20.32)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "36beaa0d-54ec-4cc5-b670-753ce45cfa3b")
+	)
+	(wire
+		(pts
+			(xy 181.61 95.25) (xy 170.18 95.25)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "37703659-581d-4fa0-a405-f076d5570d0c")
 	)
 	(wire
 		(pts
@@ -1709,13 +2228,83 @@
 	)
 	(wire
 		(pts
-			(xy 189.23 48.26) (xy 189.23 97.79)
+			(xy 135.89 97.79) (xy 137.16 97.79)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "567c83c5-d3ff-427c-9d94-90f9de7a29fa")
+		(uuid "431465b8-9b2c-4df6-9cc5-6f2a8ab7827a")
+	)
+	(wire
+		(pts
+			(xy 215.9 29.21) (xy 215.9 43.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "451f63c1-61e8-4a8b-894e-b3682826b657")
+	)
+	(wire
+		(pts
+			(xy 262.89 17.78) (xy 138.43 17.78)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "476657d6-6456-4ba2-8181-329f350d0549")
+	)
+	(wire
+		(pts
+			(xy 158.75 48.26) (xy 158.75 22.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4b15dbd1-7e84-44e2-ba30-8ce0706385d2")
+	)
+	(wire
+		(pts
+			(xy 135.89 95.25) (xy 154.94 95.25)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4dc8609b-0a53-4204-a48e-e18f2602338d")
+	)
+	(wire
+		(pts
+			(xy 118.11 45.72) (xy 139.7 45.72)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4f73d149-595e-41c8-b389-a1e70c314cc0")
+	)
+	(wire
+		(pts
+			(xy 215.9 29.21) (xy 227.33 29.21)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "50a27b21-b2a7-4d12-a880-6f50192e4d9e")
+	)
+	(wire
+		(pts
+			(xy 217.17 88.9) (xy 162.56 88.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "51764e62-dba3-4c18-b37f-00088ee114d1")
 	)
 	(wire
 		(pts
@@ -1759,13 +2348,53 @@
 	)
 	(wire
 		(pts
-			(xy 242.57 43.18) (xy 189.23 43.18)
+			(xy 242.57 43.18) (xy 222.25 43.18)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "61053a5d-d48a-4e4c-b8a0-5214c72ed638")
+	)
+	(wire
+		(pts
+			(xy 121.92 41.91) (xy 135.89 41.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "63fd2f9c-e002-4e31-aa75-4c316f0a8122")
+	)
+	(wire
+		(pts
+			(xy 139.7 45.72) (xy 139.7 85.09)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "691fc1ad-d5a0-4e63-82c5-93f3565831e9")
+	)
+	(wire
+		(pts
+			(xy 222.25 22.86) (xy 222.25 43.18)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6ac94ad3-2164-4727-aa94-d1ca913f930e")
+	)
+	(wire
+		(pts
+			(xy 137.16 30.48) (xy 132.08 30.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6b3350e3-8b96-4a46-a3a3-8dd744af82af")
 	)
 	(wire
 		(pts
@@ -1776,6 +2405,56 @@
 			(type default)
 		)
 		(uuid "6bb5626e-aa13-4ac8-99ff-5071ab14756c")
+	)
+	(wire
+		(pts
+			(xy 118.11 38.1) (xy 81.28 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6bf1c9d2-bbf9-44f0-a700-24b6cb73287a")
+	)
+	(wire
+		(pts
+			(xy 151.13 19.05) (xy 151.13 22.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6e43f6cd-4edc-4abc-8534-e1a2848aa193")
+	)
+	(wire
+		(pts
+			(xy 138.43 17.78) (xy 138.43 27.94)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6fcda76f-c89e-49e9-a682-a6bf4c79fca9")
+	)
+	(wire
+		(pts
+			(xy 185.42 91.44) (xy 185.42 27.94)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "71f0a264-0829-4110-8885-a5589c0cbfb6")
+	)
+	(wire
+		(pts
+			(xy 170.18 33.02) (xy 170.18 95.25)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7380a8ff-4b54-43df-9b29-55329bbc6266")
 	)
 	(wire
 		(pts
@@ -1819,6 +2498,16 @@
 	)
 	(wire
 		(pts
+			(xy 217.17 91.44) (xy 185.42 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "837652f1-3ada-44cf-ba33-d3918b8158e0")
+	)
+	(wire
+		(pts
 			(xy 217.17 66.04) (xy 93.98 66.04)
 		)
 		(stroke
@@ -1829,6 +2518,26 @@
 	)
 	(wire
 		(pts
+			(xy 215.9 22.86) (xy 215.9 29.21)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "84fa552f-e508-4c19-abb1-4f5b8e104b7a")
+	)
+	(wire
+		(pts
+			(xy 222.25 22.86) (xy 227.33 22.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "86f9402a-2fb2-4f50-b217-4f930bde00cb")
+	)
+	(wire
+		(pts
 			(xy 217.17 68.58) (xy 92.71 68.58)
 		)
 		(stroke
@@ -1836,6 +2545,16 @@
 			(type default)
 		)
 		(uuid "87deadb6-cefa-489f-895b-1ef0448dad1c")
+	)
+	(wire
+		(pts
+			(xy 181.61 96.52) (xy 181.61 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8ea2933c-428d-4497-bf0f-5545b12ca22c")
 	)
 	(wire
 		(pts
@@ -1859,6 +2578,16 @@
 	)
 	(wire
 		(pts
+			(xy 81.28 114.3) (xy 105.41 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "95464d24-6b55-486b-a037-f7ea574223e2")
+	)
+	(wire
+		(pts
 			(xy 189.23 43.18) (xy 189.23 48.26)
 		)
 		(stroke
@@ -1879,7 +2608,7 @@
 	)
 	(wire
 		(pts
-			(xy 181.61 95.25) (xy 181.61 114.3)
+			(xy 181.61 95.25) (xy 181.61 96.52)
 		)
 		(stroke
 			(width 0)
@@ -1896,6 +2625,26 @@
 			(type default)
 		)
 		(uuid "a719f772-7730-441b-ab7b-fc8013f5d2f5")
+	)
+	(wire
+		(pts
+			(xy 132.08 19.05) (xy 151.13 19.05)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a7a9e376-63e1-44db-9a08-3c571dbd1e7d")
+	)
+	(wire
+		(pts
+			(xy 137.16 97.79) (xy 137.16 30.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a86e4071-f5aa-48ed-a335-d4d4f01f7f49")
 	)
 	(wire
 		(pts
@@ -1926,6 +2675,36 @@
 			(type default)
 		)
 		(uuid "ae208cec-2dcc-430f-89e4-ec0f98a99e27")
+	)
+	(wire
+		(pts
+			(xy 193.04 22.86) (xy 215.9 22.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b000ada9-8689-4574-b7d8-f44c7bba5f59")
+	)
+	(wire
+		(pts
+			(xy 162.56 88.9) (xy 162.56 27.94)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b0e27aad-5192-4800-86ae-2f0d354e36bc")
+	)
+	(wire
+		(pts
+			(xy 170.18 22.86) (xy 170.18 20.32)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b0fbc0e7-6215-4d95-8d9b-955c6f1dbc28")
 	)
 	(wire
 		(pts
@@ -2049,13 +2828,33 @@
 	)
 	(wire
 		(pts
-			(xy 181.61 95.25) (xy 135.89 95.25)
+			(xy 262.89 87.63) (xy 262.89 17.78)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "e7166c1e-0e11-4794-90a0-0c5778ce4590")
+		(uuid "e02d3129-0080-48c5-9cf2-0fae39f9d39c")
+	)
+	(wire
+		(pts
+			(xy 158.75 48.26) (xy 189.23 48.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e56a1e9a-993b-4cd3-ad5f-d1539be27353")
+	)
+	(wire
+		(pts
+			(xy 139.7 85.09) (xy 135.89 85.09)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e72f9a82-102b-4e64-8b98-76d0b97d3484")
 	)
 	(wire
 		(pts
@@ -2069,13 +2868,23 @@
 	)
 	(wire
 		(pts
-			(xy 189.23 97.79) (xy 135.89 97.79)
+			(xy 215.9 43.18) (xy 189.23 43.18)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "f57437fa-3f87-4eae-acc7-2fa3263b869a")
+		(uuid "ebf45b4b-6a5d-47bd-be6e-4e6e8a237cd1")
+	)
+	(wire
+		(pts
+			(xy 135.89 85.09) (xy 134.62 85.09)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ed6da9d1-e306-4b96-a8b9-51159786fa9c")
 	)
 	(wire
 		(pts
@@ -2089,6 +2898,36 @@
 	)
 	(wire
 		(pts
+			(xy 81.28 38.1) (xy 81.28 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fc060a33-a946-4835-8756-6d68c9e5ee99")
+	)
+	(wire
+		(pts
+			(xy 158.75 22.86) (xy 151.13 22.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fc58f33e-b298-4419-95a1-b4762e3299fa")
+	)
+	(wire
+		(pts
+			(xy 135.89 77.47) (xy 135.89 41.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fe60663a-76c5-4add-b898-48fea4310347")
+	)
+	(wire
+		(pts
 			(xy 148.59 107.95) (xy 135.89 107.95)
 		)
 		(stroke
@@ -2098,17 +2937,17 @@
 		(uuid "ffe7c49e-b976-4d7c-af14-50d817436159")
 	)
 	(symbol
-		(lib_id "Transistor_BJT:2SC1815")
-		(at 146.05 35.56 0)
+		(lib_id "Connector:Conn_01x02_Socket")
+		(at 232.41 22.86 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced yes)
-		(uuid "2668608a-e278-4b39-8c9d-fb22205068de")
-		(property "Reference" "Q1"
-			(at 151.13 34.2899 0)
+		(uuid "0c74e4ad-b7e9-4cf5-8165-6c33f6687240")
+		(property "Reference" "J2"
+			(at 233.68 22.8599 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2116,8 +2955,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "2SC1815"
-			(at 151.13 36.8299 0)
+		(property "Value" "Conn_01x02_Socket"
+			(at 233.68 25.3999 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2125,29 +2964,26 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Package_TO_SOT_THT:TO-92_Inline"
-			(at 151.13 37.465 0)
+		(property "Footprint" "Connector_PinSocket_2.54mm:PinSocket_1x02_P2.54mm_Vertical"
+			(at 232.41 22.86 0)
 			(effects
 				(font
 					(size 1.27 1.27)
-					(italic yes)
 				)
-				(justify left)
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "https://media.digikey.com/pdf/Data%20Sheets/Toshiba%20PDFs/2SC1815.pdf"
-			(at 146.05 35.56 0)
+		(property "Datasheet" "~"
+			(at 232.41 22.86 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 				(hide yes)
 			)
 		)
-		(property "Description" "0.15A Ic, 50V Vce, Low Noise Audio NPN Transistor, TO-92"
-			(at 146.05 35.56 0)
+		(property "Description" "Generic connector, single row, 01x02, script generated"
+			(at 232.41 22.86 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2156,18 +2992,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "363597bc-18e9-4687-89ae-e72e5cd27a74")
+			(uuid "4543b666-7529-4c0f-938e-ba7df6a971a7")
 		)
 		(pin "2"
-			(uuid "3f4eb378-bf89-4d5c-adbe-8dfe24eec600")
-		)
-		(pin "3"
-			(uuid "0bdd8be9-76be-459d-ad77-ef3366d9d93f")
+			(uuid "2e03c5f6-179a-4257-a32e-0b51dc572e83")
 		)
 		(instances
 			(project ""
 				(path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55"
-					(reference "Q1")
+					(reference "J2")
 					(unit 1)
 				)
 			)
@@ -2477,6 +3310,377 @@
 			(project ""
 				(path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55"
 					(reference "J1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Other:2SC1815")
+		(at 143.51 27.94 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "9043ff5f-228f-45b0-89a2-380ae29dbe09")
+		(property "Reference" "Q1"
+			(at 148.59 26.6699 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "2sc3205"
+			(at 148.59 29.2099 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_THT:TO-92_Inline"
+			(at 148.59 29.845 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://alltransistors.com/ru/adv/pdfview.php?doc=2sc3209.pdf&dire=_nec"
+			(at 108.458 45.212 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Description" "2A Ic, 30V Vce, Low Noise Audio NPN Transistor, TO-92"
+			(at 148.336 10.922 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "84abc332-f164-49e7-a7ce-fbc5442e47a8")
+		)
+		(pin "3"
+			(uuid "dedf1897-9c3d-4d32-9113-86c6c3a2864b")
+		)
+		(pin "1"
+			(uuid "eeee2db1-27a5-46a4-8105-abfeb7d51368")
+		)
+		(instances
+			(project ""
+				(path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55"
+					(reference "Q1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Other:2SC1815")
+		(at 190.5 27.94 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "c7901d9f-6f70-4f7b-8637-0b5e5c1fa208")
+		(property "Reference" "Q3"
+			(at 195.58 26.6699 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "2sc3205"
+			(at 195.58 29.2099 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_THT:TO-92_Inline"
+			(at 195.58 29.845 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://alltransistors.com/ru/adv/pdfview.php?doc=2sc3209.pdf&dire=_nec"
+			(at 155.448 45.212 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Description" "2A Ic, 30V Vce, Low Noise Audio NPN Transistor, TO-92"
+			(at 195.326 10.922 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "e2a32ad0-ef5d-4660-a49c-6652bb06a1e3")
+		)
+		(pin "1"
+			(uuid "dcd58909-e406-461e-be90-f29632aaeaaa")
+		)
+		(pin "3"
+			(uuid "1f6e40ff-89dc-436a-90b5-7c5b5407065c")
+		)
+		(instances
+			(project ""
+				(path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55"
+					(reference "Q3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Other:2SC1815")
+		(at 167.64 27.94 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "d8172b32-ce27-4d26-ba1b-708e2daca756")
+		(property "Reference" "Q2"
+			(at 172.72 26.6699 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "2sc3205"
+			(at 172.72 29.2099 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "Package_TO_SOT_THT:TO-92_Inline"
+			(at 172.72 29.845 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+					(italic yes)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "https://alltransistors.com/ru/adv/pdfview.php?doc=2sc3209.pdf&dire=_nec"
+			(at 132.588 45.212 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Description" "2A Ic, 30V Vce, Low Noise Audio NPN Transistor, TO-92"
+			(at 172.466 10.922 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "729aeb79-019c-422e-a388-07435d739a2f")
+		)
+		(pin "1"
+			(uuid "7f269a65-aee4-4045-bd2e-d701a988ba40")
+		)
+		(pin "3"
+			(uuid "bae90aaa-e2be-4bd4-a431-4bcbe46d0d3d")
+		)
+		(instances
+			(project ""
+				(path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55"
+					(reference "Q2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Conn_01x02_Socket")
+		(at 232.41 29.21 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "d9c931c4-ce41-40ce-9226-2f4cde9b7683")
+		(property "Reference" "J3"
+			(at 233.68 29.2099 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Conn_01x02_Socket"
+			(at 233.68 31.7499 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 232.41 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 232.41 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x02, script generated"
+			(at 232.41 29.21 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "6949d588-a650-446e-9701-9e975198caeb")
+		)
+		(pin "1"
+			(uuid "4ef7393f-35d4-49af-8335-60d574d82aff")
+		)
+		(instances
+			(project ""
+				(path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55"
+					(reference "J3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Potentiometer")
+		(at 118.11 41.91 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "e7fd0b70-6884-41d1-a1ca-8c7c8daa7ef0")
+		(property "Reference" "RV1"
+			(at 115.57 40.6399 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "R_Potentiometer"
+			(at 115.57 43.1799 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "Potentiometer_THT:Potentiometer_Bourns_3296Y_Vertical"
+			(at 118.11 41.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 118.11 41.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Potentiometer"
+			(at 118.11 41.91 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "5f123695-4f54-4a70-8010-83f3873d54a6")
+		)
+		(pin "3"
+			(uuid "5ae6de52-d8e5-41c1-8150-0d18b500c127")
+		)
+		(pin "1"
+			(uuid "36fc6867-3e53-4322-b937-989701b1365a")
+		)
+		(instances
+			(project ""
+				(path "/e63e39d7-6ac0-4ffd-8aa3-1841a4541b55"
+					(reference "RV1")
 					(unit 1)
 				)
 			)

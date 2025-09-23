@@ -7,6 +7,7 @@
 #include <chrono>
 #include <vector>
 #include <fstream>
+#include <cstdint>
 
 namespace elevator_control{
 
@@ -35,6 +36,21 @@ namespace elevator_control{
      int scanner_data_bits = 8;
      std::string scanner_stop_bits = "";
      std::string scanner_linux_com_port = "";
+     int display_width = 128;
+     int display_height = 64;
+     int pin_rs = 0;
+     int pin_en = 0;
+     int pin_reset = 0;
+     int pin_cs1 = 0;
+     int pin_cs2 = 0;
+     int pin_d0 = 0;
+     int pin_d1 = 0;
+     int pin_d2 = 0;
+     int pin_d3 = 0;
+     int pin_d4 = 0;
+     int pin_d5 = 0;
+     int pin_d6 = 0;
+     int pin_d7 = 0;
         };
   
   class ElevatorControl{

@@ -72,6 +72,52 @@ void JsonReader::LoadSettings(elevator_control::ElevatorControl& ec){
 	  else if(key == "scanner_linux_com_port"){
 	    settings.scanner_linux_com_port = value.AsString();
 	  }
+	  else if(key == "display_width"){
+	    settings.display_width = value.AsInt();
+	  }
+	  else if(key == "display_height"){
+	    settings.display_height = value.AsInt();
+	  }
+	  else if(key == "pin_reset"){
+	    settings.pin_reset = value.AsInt();
+	  }
+	  else if(key == "pin_rs"){
+	    settings.pin_rs = value.AsInt();
+	  }
+	  else if(key == "pin_en"){
+	    settings.pin_en = value.AsInt();
+	  }
+	  else if(key == "pin_cs1"){
+	    settings.pin_cs1 = value.AsInt();
+	  }
+	  else if(key == "pin_cs2"){
+	    settings.pin_cs2 = value.AsInt();
+	  }
+	  else if(key == "pin_d0"){
+	    settings.pin_d0 = value.AsInt();
+	  }
+	  else if(key == "pin_d1"){
+	    settings.pin_d1 = value.AsInt();
+	  }
+	  else if(key == "pin_d2"){
+	    settings.pin_d2 = value.AsInt();
+	  }
+	  else if(key == "pin_d3"){
+	    settings.pin_d3 = value.AsInt();
+	  }
+	  else if(key == "pin_d4"){
+	    settings.pin_d4 = value.AsInt();
+	  }
+	  else if(key == "pin_d5"){
+	    settings.pin_d5 = value.AsInt();
+	  }
+	  else if(key == "pin_d6"){
+	    settings.pin_d6 = value.AsInt();
+	  }
+	  else if(key == "pin_d7"){
+	    settings.pin_d7 = value.AsInt();
+	  }
+	  
       }
       ec.SaveSettings(settings);	
 }
