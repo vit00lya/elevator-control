@@ -51,6 +51,7 @@ namespace elevator_control{
      int pin_d5 = 0;
      int pin_d6 = 0;
      int pin_d7 = 0;
+     int pin_led = 0;
         };
   
   class ElevatorControl{

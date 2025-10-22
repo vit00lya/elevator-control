@@ -117,7 +117,9 @@ void JsonReader::LoadSettings(elevator_control::ElevatorControl& ec){
 	  else if(key == "pin_d7"){
 	    settings.pin_d7 = value.AsInt();
 	  }
-	  
+	  else if(key == "pin_led"){
+	    settings.pin_led = value.AsInt();
+	  }
       }
       ec.SaveSettings(settings);	
 }

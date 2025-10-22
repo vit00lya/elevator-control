@@ -56,17 +56,20 @@ std::vector<std::wstring> GetStrings(const std::wstring& str){
   return result;
 }
 
-void PrintDisplayText(const std::wstring& str){
+void PrintDisplayText(const std::wstring& str, bool wait = true){
   
   clearScreen();
   std::vector<std::wstring> lines = GetStrings(str);
   PrintLines(lines);
   syncBuffer();
-  delay(5000);
+  if(wait){
+    delay(5000);
+  }
 }
 
 void InitDisplay(elevator_control::Settings& settings){
-    if(setupWiringRP(WRP_MODE_PHYS) < 0)
+
+  if(setupWiringRP(WRP_MODE_PHYS) < 0)
          exit(EXIT_FAILURE);
 
     init(settings.display_width,
@@ -83,13 +86,22 @@ void InitDisplay(elevator_control::Settings& settings){
 	 settings.pin_d4,
 	 settings.pin_d5,
 	 settings.pin_d6,
-	 settings.pin_d7
+	 settings.pin_d7,
+	 settings.pin_led
 	 );
+    ledOn();
     drawBitmap(logo,128,64);
-     shiftBufferHorizontal(30);
-     syncBuffer();
-     delay(5000);
-     clearScreen();
+    shiftBufferHorizontal(30);
+    syncBuffer();
+    delay(5000);
+    clearScreen();
+
+}
+
+void ReleaseWiringRP(int i){
+  clearScreen();
+  ledOff();
+  releaseWiringRP();
 }
 
 #endif
@@ -108,6 +120,7 @@ int main(){
 
   #if EXTERNAL_DISPLAY
     InitDisplay(settings);
+    signal(SIGINT, ReleaseWiringRP);
   #endif
   
   if(settings.scanner_enable){
@@ -137,7 +150,7 @@ int main(){
   while(true){
 
     #if EXTERNAL_DISPLAY
-      PrintDisplayText(L"Введите штрихкод");
+       PrintDisplayText(L"Введите штрихкод", false);
     #endif
     std::cout << "Введите штрихкод"s << "\n";
     input_string = ""s;
