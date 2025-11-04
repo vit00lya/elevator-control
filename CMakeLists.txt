@@ -4,9 +4,12 @@ project(ElevatorControl)
 set(CMAKE_CXX_STANDARD 20)
 set(TARGET ElevatorControl)
 
+# Find libcurl
+find_package(CURL REQUIRED)
+
 list(APPEND SOURCES
 	src/xserial.cpp
-        src/xserial.hpp
+    src/xserial.hpp
 	src/elevator_control.cpp
 	src/elevator_control.h
 	src/input_reader.cpp
@@ -15,6 +18,8 @@ list(APPEND SOURCES
 	src/json_reader.cpp
 	src/json.h
 	src/json.cpp
+	src/display.cpp
+	src/display.h
 	src/json_builder.cpp
 	src/json_builder.h
 	src/magic_enum.hpp

@@ -1,2 +1,4 @@
 build
 *~
+src/#json_reader.cpp#
+src/#json.cpp#
