@@ -6,6 +6,7 @@
 #include <chrono>
 #include <atomic>
 #include <functional>
+#include "network_client.h"
 
 using namespace jsonreader;
 
@@ -14,7 +15,11 @@ void JsonReader::FilligBarcodes(elevator_control::ElevatorControl& ec){
 
       // Открываем файл обмена, путь к которому указан в настройках
       std::ifstream input_json;
-      input_json.open(ec.GetSettings().path_exchange_file, std::ios::binary);
+      if (!input_json.good()) {
+        input_json.open("barcode.json", std::ios::binary);
+        std::cerr << "Не возможно прочитать файл штрихкодов barcode.json" << std::endl;
+	      throw ;
+      }
       
       // Загружаем и парсим JSON документ
       json::Document doc = json::Load(input_json);
@@ -73,13 +78,13 @@ void JsonReader::LoadSettings(elevator_control::ElevatorControl& ec){
       json::Document doc = json::Load(input_json);
       json::Dict dict = doc.GetRoot().AsMap();
 	for(const auto& [key, value]: dict){
-	  if(key == "path_exchange_file"s){
-	    settings.path_exchange_file = value.AsString();
-	  }
-	   else if(key == "scanner_enable"){
+	   if(key == "scanner_enable"){
 	     settings.scanner_enable = value.AsBool();
 	  }
-	  else if(key == "scanner_num_com_port"){
+	  else if(key == "server_address"){
+	    settings.server_address = value.AsString();
+	  }
+    else if(key == "scanner_num_com_port"){
 	    settings.scanner_num_com_port = value.AsInt();
 	  }
 	  else if(key == "scanner_baud_rate"){
@@ -103,47 +108,47 @@ void JsonReader::LoadSettings(elevator_control::ElevatorControl& ec){
 	  else if(key == "display_height"){
 	    settings.display_height = value.AsInt();
 	  }
-	  else if(key == "pin_reset"){
-	    settings.pin_reset = value.AsInt();
+	  else if(key == "display_pin_reset"){
+	    settings.display_pin_reset = value.AsInt();
 	  }
-	  else if(key == "pin_rs"){
-	    settings.pin_rs = value.AsInt();
+	  else if(key == "display_pin_rs"){
+	    settings.display_pin_rs = value.AsInt();
 	  }
-	  else if(key == "pin_en"){
-	    settings.pin_en = value.AsInt();
+	  else if(key == "display_pin_en"){
+	    settings.display_pin_en = value.AsInt();
 	  }
-	  else if(key == "pin_cs1"){
-	    settings.pin_cs1 = value.AsInt();
+	  else if(key == "display_pin_cs1"){
+	    settings.display_pin_cs1 = value.AsInt();
 	  }
-	  else if(key == "pin_cs2"){
-	    settings.pin_cs2 = value.AsInt();
+	  else if(key == "display_pin_cs2"){
+	    settings.display_pin_cs2 = value.AsInt();
 	  }
-	  else if(key == "pin_d0"){
-	    settings.pin_d0 = value.AsInt();
+	  else if(key == "display_pin_d0"){
+	    settings.display_pin_d0 = value.AsInt();
 	  }
-	  else if(key == "pin_d1"){
-	    settings.pin_d1 = value.AsInt();
+	  else if(key == "display_pin_d1"){
+	    settings.display_pin_d1 = value.AsInt();
 	  }
-	  else if(key == "pin_d2"){
-	    settings.pin_d2 = value.AsInt();
+	  else if(key == "display_pin_d2"){
+	    settings.display_pin_d2 = value.AsInt();
 	  }
-	  else if(key == "pin_d3"){
-	    settings.pin_d3 = value.AsInt();
+	  else if(key == "display_pin_d3"){
+	    settings.display_pin_d3 = value.AsInt();
 	  }
-	  else if(key == "pin_d4"){
-	    settings.pin_d4 = value.AsInt();
+	  else if(key == "display_pin_d4"){
+	    settings.display_pin_d4 = value.AsInt();
 	  }
-	  else if(key == "pin_d5"){
-	    settings.pin_d5 = value.AsInt();
+	  else if(key == "display_pin_d5"){
+	    settings.display_pin_d5 = value.AsInt();
 	  }
-	  else if(key == "pin_d6"){
-	    settings.pin_d6 = value.AsInt();
+	  else if(key == "display_pin_d6"){
+	    settings.display_pin_d6 = value.AsInt();
 	  }
-	  else if(key == "pin_d7"){
-	    settings.pin_d7 = value.AsInt();
+	  else if(key == "display_pin_d7"){
+	    settings.display_pin_d7 = value.AsInt();
 	  }
-	  else if(key == "pin_led"){
-	    settings.pin_led = value.AsInt();
+	  else if(key == "display_pin_led"){
+	    settings.display_pin_led = value.AsInt();
 	  }
       }
       ec.SaveSettings(settings);	
@@ -178,7 +183,7 @@ void JsonReader::StartBackgroundSender(elevator_control::ElevatorControl& ec) {
                 std::cout << "Создан транспортный пакет: " << filename << std::endl;
                 
                 // Отправляем пакет
-                this->SendTransportPackage(filename);
+                network_client::SendTransportPackage(filename);
                 std::cout << "Транспортный пакет отправлен: " << filename << std::endl;
             } catch (const std::exception& e) {
                 std::cerr << "Ошибка при создании или отправке транспортного пакета: " << e.what() << std::endl;
@@ -237,72 +242,4 @@ std::string JsonReader::SaveTransportPackage(elevator_control::ElevatorControl& 
     
 }
 
-/**
- * @brief Callback-функция для записи данных ответа от сервера в строку.
- *
- * Используется библиотекой libcurl для обработки полученных данных.
- *
- * @param contents Указатель на данные ответа.
- * @param size Размер одного элемента данных.
- * @param nmemb Количество элементов данных.
- * @param response Указатель на строку, в которую будут записаны данные.
- * @return Общее количество записанных байт.
- */
-// Callback function to write response data
-static size_t WriteCallback(void* contents, size_t size, size_t nmemb, std::string* response) {
-    size_t total_size = size * nmemb;
-    response->append((char*)contents, total_size);
-    return total_size;
-}
 
-/**
- * @brief Отправляет транспортный пакет (файл) на сервер по адресу http://127.0.0.1/upload.
- *
- * Использует библиотеку libcurl для выполнения HTTP POST запроса с файлом в виде multipart/form-data.
- * После отправки выводит код ответа и текст ответа сервера.
- *
- * @param filename Путь к файлу транспортного пакета, который нужно отправить.
- */
-void JsonReader::SendTransportPackage(const std::string& filename) {
-    CURL* curl;
-    CURLcode res;
-    std::string response_string;
-
-    curl = curl_easy_init();
-    if (curl) {
-    
-        curl_easy_setopt(curl, CURLOPT_URL, "http://127.0.0.1/upload");
-
-        // Set the form data
-        curl_mime *form = NULL;
-        curl_mimepart *field = NULL;
-        form = curl_mime_init(curl);
-        
-        field = curl_mime_addpart(form);
-        curl_mime_name(field, "file");
-        curl_mime_filedata(field, filename.c_str());
-        
-        curl_easy_setopt(curl, CURLOPT_MIMEPOST, form);
-
-        // Set the callback function to handle the response
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response_string);
-
-        // Perform the request
-        res = curl_easy_perform(curl);
-
-        // Check for errors
-        if (res != CURLE_OK) {
-            std::cerr << "curl_easy_perform() ошибка: " << curl_easy_strerror(res) << std::endl;
-        } else {
-            long response_code;
-            curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response_code);
-            std::cout << "Код ответа: " << response_code << std::endl;
-            std::cout << "Ответ: " << response_string << std::endl;
-        }
-
-        // Cleanup
-        curl_mime_free(form);
-        curl_easy_cleanup(curl);
-    }
-}

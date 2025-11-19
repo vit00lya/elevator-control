@@ -9,11 +9,36 @@
 - `xserial` - библиотека для работы с COM-портом, в данном проекте используется для подключения сканера штрихкодов
 - `elevator_control` - основной класс содержит список товаров и их штрихкода
 - `main` — точка входа в приложение
+- `display` - библиотека для вывода информации на дисплей
 
 При запуске программа считывает данные из полученного по http с сервера JSON файла.
 
 Формат JSON:
 	{
+		// Настройки сканера
+		"scanner_enable":false, // Включить сканер штрихкодов
+		"scanner_num_com_port":0,
+		"scanner_baud_rate":9600,
+		"scanner_parity":"COM_PORT_NOPARITY",
+		"scanner_data_bits":8,
+		"scanner_stop_bits":"COM_PORT_ONESTOPBIT",
+		"scanner_linux_com_port":"ttyACM",
+		// Настройки дисплея
+		"display_width":128,
+		"display_height":64,
+		"pin_reset":29,
+		"pin_rs":31,
+		"pin_en":33,
+		"pin_cs1":23,
+		"pin_cs2":27,
+		"pin_d0":3,
+		"pin_d1":5,
+		"pin_d2":7,
+		"pin_d3":11,
+		"pin_d4":13,
+		"pin_d5":15,
+		"pin_d6":19,
+		"pin_d7":21
 	}
 
 Оператор которому нужно открыть лифт последовательно считывает штрихкоды.

@@ -23,7 +23,9 @@ list(APPEND SOURCES
 	src/json_builder.cpp
 	src/json_builder.h
 	src/magic_enum.hpp
-	src/main.cpp)
+	src/main.cpp
+	src/network_client.cpp
+	src/network_client.h)
 
 add_executable(${TARGET} ${SOURCES})
 

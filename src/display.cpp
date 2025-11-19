@@ -83,21 +83,21 @@ void InitDisplay(elevator_control::Settings& settings){
          exit(EXIT_FAILURE);
 
     init(settings.display_width,
-	 settings.display_height,
-	 settings.pin_reset,
-	 settings.pin_rs,
-	 settings.pin_en,
-	 settings.pin_cs1,
-	 settings.pin_cs2,
-	 settings.pin_d0,
-	 settings.pin_d1,
-	 settings.pin_d2,
-	 settings.pin_d3,
-	 settings.pin_d4,
-	 settings.pin_d5,
-	 settings.pin_d6,
-	 settings.pin_d7,
-	 settings.pin_led
+        settings.display_height,
+        settings.display_pin_reset,
+        settings.display_pin_rs,
+        settings.display_pin_en,
+        settings.display_pin_cs1,
+        settings.display_pin_cs2,
+        settings.display_pin_d0,
+        settings.display_pin_d1,
+        settings.display_pin_d2,
+        settings.display_pin_d3,
+        settings.display_pin_d4,
+        settings.display_pin_d5,
+        settings.display_pin_d6,
+        settings.display_pin_d7,
+        settings.display_pin_led
 	 );
     ledOn();
     drawBitmap(logo,128,64);

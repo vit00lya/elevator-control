@@ -28,7 +28,7 @@ namespace elevator_control{
     };
 
    struct Settings{
-     std::string path_exchange_file;
+     std::string server_address = "";
      bool scanner_enable = false;
      int scanner_num_com_port = 0;
      int scanner_baud_rate = 9600;
@@ -38,20 +38,20 @@ namespace elevator_control{
      std::string scanner_linux_com_port = "";
      int display_width = 128;
      int display_height = 64;
-     int pin_rs = 0;
-     int pin_en = 0;
-     int pin_reset = 0;
-     int pin_cs1 = 0;
-     int pin_cs2 = 0;
-     int pin_d0 = 0;
-     int pin_d1 = 0;
-     int pin_d2 = 0;
-     int pin_d3 = 0;
-     int pin_d4 = 0;
-     int pin_d5 = 0;
-     int pin_d6 = 0;
-     int pin_d7 = 0;
-     int pin_led = 0;
+     int display_pin_rs = 0;
+     int display_pin_en = 0;
+     int display_pin_reset = 0;
+     int display_pin_cs1 = 0;
+     int display_pin_cs2 = 0;
+     int display_pin_d0 = 0;
+     int display_pin_d1 = 0;
+     int display_pin_d2 = 0;
+     int display_pin_d3 = 0;
+     int display_pin_d4 = 0;
+     int display_pin_d5 = 0;
+     int display_pin_d6 = 0;
+     int display_pin_d7 = 0;
+     int display_pin_led = 0;
         };
   
   class ElevatorControl{

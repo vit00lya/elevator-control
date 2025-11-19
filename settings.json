@@ -1,5 +1,5 @@
 {
-    "path_exchange_file":"/home/vitasan/git/elevator-control/test/barcode.json",
+    "server_address":"",
     "scanner_enable":false,
     "scanner_num_com_port":0,
     "scanner_baud_rate":9600,
@@ -9,17 +9,17 @@
     "scanner_linux_com_port":"ttyACM",
     "display_width":128,
     "display_height":64,
-    "pin_reset":29,
-    "pin_rs":31
-    "pin_en":33,
-    "pin_cs1":23,
-    "pin_cs2":27,
-    "pin_d0":3,
-    "pin_d1":5,
-    "pin_d2":7,
-    "pin_d3":11,
-    "pin_d4":13,
-    "pin_d5":15,
-    "pin_d6":19,
-    "pin_d7":21
+    "display_pin_reset":29,
+    "display_pin_rs":31,
+    "display_pin_en":33,
+    "display_pin_cs1":23,
+    "display_pin_cs2":27,
+    "display_pin_d0":3,
+    "display_pin_d1":5,
+    "display_pin_d2":7,
+    "display_pin_d3":11,
+    "display_pin_d4":13,
+    "display_pin_d5":15,
+    "display_pin_d6":19,
+    "display_pin_d7":21
 }
