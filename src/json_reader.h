@@ -35,17 +35,14 @@ namespace jsonreader
          * @param ec Ссылка на объект управления лифтом.
          */
         void StartBackgroundSender(elevator_control::ElevatorControl& ec);
-        
-        /**
-         * @brief Останавливает фоновый поток отправки пакетов.
-         *
-         * Устанавливает флаг остановки и дожидается завершения потока.
-         */
-        void StopBackgroundSender();
+
+        void StartBackgroundDownloadBarcode(elevator_control::ElevatorControl& ec);
 
     private:
-        std::thread background_thread_; ///< Поток для фоновой отправки
-        std::atomic<bool> stop_flag_{false}; ///< Флаг для остановки потока
+        std::thread background_thread_sender_; 
+        std::atomic<bool> stop_flag_sender_{false}; 
+        std::thread background_thread_barcode_; 
+        std::atomic<bool> stop_flag_barcode_{false}; 
     };
 
 

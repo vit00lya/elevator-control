@@ -491,12 +491,12 @@ namespace xserial {
     }
 
     ComPort::ComPort() {
-        // найдем COM порт (первый в списке)
-        if (foundComPort()) {
-            openPort(autoFoundComPort, defaultBaudRate, defaultParity, defaultDataBits, defaultStopBit, defaultMode);
-        } else {
-            printf("Error: port is not found!\r\n");
-        }
+        // // найдем COM порт (первый в списке)
+        // if (foundComPort()) {
+        //     openPort(autoFoundComPort, defaultBaudRate, defaultParity, defaultDataBits, defaultStopBit, defaultMode);
+        // } else {
+        //     printf("Error: port is not found!\r\n");
+        // }
     }
 
     bool ComPort::open(void) {

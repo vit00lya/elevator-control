@@ -18,16 +18,21 @@ list(APPEND SOURCES
 	src/json_reader.cpp
 	src/json.h
 	src/json.cpp
-	src/display.cpp
-	src/display.h
 	src/json_builder.cpp
 	src/json_builder.h
 	src/magic_enum.hpp
 	src/main.cpp
 	src/network_client.cpp
-	src/network_client.h)
+	src/network_client.h) 
+
+if(EXTERNAL_DISPLAY)
+	list(PREPEND SOURCES 
+	src/display.cpp
+	src/display.h)
+endif()
 
 add_executable(${TARGET} ${SOURCES})
+target_link_libraries(${TARGET} CURL::libcurl)   
 
 if(EXTERNAL_DISPLAY)
 	add_subdirectory(../WiringRP ${CMAKE_BINARY_DIR}/wrp)

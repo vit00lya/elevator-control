@@ -16,10 +16,11 @@ void JsonReader::FilligBarcodes(elevator_control::ElevatorControl& ec){
       // Открываем файл обмена, путь к которому указан в настройках
       std::ifstream input_json;
       if (!input_json.good()) {
-        input_json.open("barcode.json", std::ios::binary);
         std::cerr << "Не возможно прочитать файл штрихкодов barcode.json" << std::endl;
 	      throw ;
       }
+
+      input_json.open("barcode.json", std::ios::binary);
       
       // Загружаем и парсим JSON документ
       json::Document doc = json::Load(input_json);
@@ -64,13 +65,13 @@ void JsonReader::LoadSettings(elevator_control::ElevatorControl& ec){
       try{
 	input_json.open("settings.json", std::ios::binary);
 	if (!input_json.good()) {
-	   std::cerr << "Не возможно прочитать файл настроек settings.json" << std::endl;
-	   throw ;
+        std::cerr << "Не возможно прочитать файл настроек settings.json" << std::endl;
+        throw ;
 	}
       }
       catch(...){
-	std::cerr << "Не возможно прочитать файл настроек settings.json" << std::endl;
-	throw ;
+        std::cerr << "Не возможно прочитать файл настроек settings.json" << std::endl;
+        throw ;
       } 
       
       elevator_control::Settings settings;
@@ -156,24 +157,26 @@ void JsonReader::LoadSettings(elevator_control::ElevatorControl& ec){
 
 void JsonReader::StartBackgroundSender(elevator_control::ElevatorControl& ec) {
     // Проверяем, не запущен ли уже поток
-    if (background_thread_.joinable()) {
+    if (background_thread_sender_.joinable()) {
         std::cerr << "Фоновый поток уже запущен!" << std::endl;
         return;
     }
 
+    elevator_control::Settings settings = ec.GetSettings();
+    
     // Сбрасываем флаг остановки
-    stop_flag_.store(false);
+    stop_flag_sender_.store(false);
 
     // Запускаем новый поток
-    background_thread_ = std::thread([this, &ec]() {
+    background_thread_sender_ = std::thread([this, &ec, &settings]() {
         using namespace std::chrono_literals;
         
-        while (!stop_flag_.load()) {
+        while (!stop_flag_sender_.load()) {
             // Ждем 10 минут
             std::this_thread::sleep_for(600s);
             
             // Проверяем еще раз флаг остановки после сна
-            if (stop_flag_.load()) {
+            if (stop_flag_sender_.load()) {
                 break;
             }
             
@@ -183,7 +186,7 @@ void JsonReader::StartBackgroundSender(elevator_control::ElevatorControl& ec) {
                 std::cout << "Создан транспортный пакет: " << filename << std::endl;
                 
                 // Отправляем пакет
-                network_client::SendTransportPackage(filename);
+                network_client::SendTransportPackage(settings.server_address, filename);
                 std::cout << "Транспортный пакет отправлен: " << filename << std::endl;
             } catch (const std::exception& e) {
                 std::cerr << "Ошибка при создании или отправке транспортного пакета: " << e.what() << std::endl;
@@ -196,6 +199,45 @@ void JsonReader::StartBackgroundSender(elevator_control::ElevatorControl& ec) {
     std::cout << "Фоновый поток для отправки пакетов запущен." << std::endl;
 }
 
+void JsonReader::StartBackgroundDownloadBarcode(elevator_control::ElevatorControl& ec) {
+    // Проверяем, не запущен ли уже поток
+    if (background_thread_barcode_.joinable()) {
+        std::cerr << "Фоновый поток уже запущен!" << std::endl;
+        return;
+    }
+
+    elevator_control::Settings settings = ec.GetSettings();
+
+    // Сбрасываем флаг остановки
+    stop_flag_barcode_.store(false);
+
+    // Запускаем новый поток
+    background_thread_barcode_ = std::thread([this, settings]() {
+        using namespace std::chrono_literals;
+        
+        while (!stop_flag_barcode_.load()) {
+
+            // Проверяем еще раз флаг остановки после сна
+            if (stop_flag_barcode_.load()) {
+                break;
+            }
+            
+            try { 
+                // Получаем штрихкоды
+                network_client::DownloadBarcodeJsonData(settings.server_address, "barcode.json") ;
+                std::cout << "Штрихкоды сохранены в файле: " << "barcode.json" << std::endl;
+            } catch (const std::exception& e) {
+                std::cerr << "Ошибка при сохранении файла: " << e.what() << std::endl;
+            } catch (...) {
+                std::cerr << "Неизвестная ошибка при сохранения файла." << std::endl;
+              // Ждем 60 минут
+            }
+            std::this_thread::sleep_for(6000s);
+        }
+    });
+    
+    std::cout << "Фоновый поток для отправки пакетов запущен." << std::endl;
+}
 
 /**
  * @brief Создает и сохраняет транспортный пакет с штрихкодами в JSON-файл.

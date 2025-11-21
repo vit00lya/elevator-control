@@ -27,6 +27,8 @@ int main(){
   elevator_control::Settings settings;
   settings = ec.GetSettings();
 
+  jr.StartBackgroundDownloadBarcode(ec);
+
   #if EXTERNAL_DISPLAY
     InitDisplay(settings);
     signal(SIGINT, ReleaseWiringRP);
