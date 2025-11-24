@@ -24,18 +24,17 @@ static size_t WriteCallback(char *contents, size_t size, size_t nmemb, void *use
     return total_size;
 }
 
-bool network_client::DownloadBarcodeJsonData(const std::string& url, const std::string& filename) {
+bool network_client::DownloadBarcodeJsonData(const std::string& url, const std::string& filename, const std::string& userpassword) {
     CURL* curl;
     CURLcode res;
     std::string readBuffer;
     std::string url_plus_prefix = url + "/product";
-    std::string userpassword;
     // Инициализация CURL
     curl = curl_easy_init();
     if(curl) {
         // Установка URL
         curl_easy_setopt(curl, CURLOPT_URL, url_plus_prefix.c_str());
-        curl_easy_setopt(curl, CURLOPT_USERPWD, userpassword);
+        curl_easy_setopt(curl, CURLOPT_USERPWD, userpassword.c_str());
         curl_easy_setopt(curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
 
         // Установка callback функции для записи данных
@@ -58,7 +57,7 @@ bool network_client::DownloadBarcodeJsonData(const std::string& url, const std::
         long http_code = 0;
         CURLcode info_res = curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
 
-        if (http_code = 200)
+        if (http_code == 200)
         {
             std::ofstream outFile(filename);
             if (!outFile.is_open()) {
@@ -67,7 +66,7 @@ bool network_client::DownloadBarcodeJsonData(const std::string& url, const std::
             }
             outFile << readBuffer;
             outFile.close();  
-           
+            std::cerr << "Штрихкоды сохранены в файле: " << filename << std::endl;
             return true;
         }
         else{
@@ -88,11 +87,10 @@ bool network_client::DownloadBarcodeJsonData(const std::string& url, const std::
  * @param filename Путь к файлу транспортного пакета, который нужно отправить.
  * @param url Адрес сервера
  */
-void network_client::SendTransportPackage(const std::string& url, const std::string& filename) {
+void network_client::SendTransportPackage(const std::string& url, const std::string& filename, const std::string& userpassword) {
     CURL* curl;
     CURLcode res;
     std::string response_string;
-    std::string userpassword;
 
     curl = curl_easy_init();
     if (curl) {
@@ -109,7 +107,7 @@ void network_client::SendTransportPackage(const std::string& url, const std::str
         curl_mime_filedata(field, filename.c_str());
         
         curl_easy_setopt(curl, CURLOPT_MIMEPOST, form);
-        curl_easy_setopt(curl, CURLOPT_USERPWD, userpassword);
+        curl_easy_setopt(curl, CURLOPT_USERPWD, userpassword.c_str());
 
         // Set the callback function to handle the response
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);

@@ -1,5 +1,7 @@
 {
+    "device_id":0,
     "server_address":"",
+    "userpassword":"",
     "scanner_enable":false,
     "scanner_num_com_port":0,
     "scanner_baud_rate":9600,

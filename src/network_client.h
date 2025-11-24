@@ -9,6 +9,6 @@ namespace network_client{
  * @param filename Имя файла для сохранения данных
  * @return true в случае успеха, false в случае ошибки
  */
-bool DownloadBarcodeJsonData(const std::string& url, const std::string& filename);
-void SendTransportPackage(const std::string& url, const std::string& filename);
+bool DownloadBarcodeJsonData(const std::string& url, const std::string& filename, const std::string& userpassword);
+void SendTransportPackage(const std::string& url, const std::string& filename, const std::string& userpassword);
 }

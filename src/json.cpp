@@ -324,7 +324,7 @@ const string& Node::AsString() const {
          return *pval;
      }
      else{
-         throw std::logic_error("Ошибка, элемент JSON не является int"s);
+         throw std::logic_error("Ошибка, элемент JSON не является long"s);
      }
 }
 

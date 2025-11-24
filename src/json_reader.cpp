@@ -10,43 +10,48 @@
 
 using namespace jsonreader;
 
-void JsonReader::FilligBarcodes(elevator_control::ElevatorControl& ec){
-      using namespace std::literals;
+void JsonReader::FilligBarcodes(elevator_control::ElevatorControl &ec)
+{
+  using namespace std::literals;
 
-      // Открываем файл обмена, путь к которому указан в настройках
-      std::ifstream input_json;
-      if (!input_json.good()) {
-        std::cerr << "Не возможно прочитать файл штрихкодов barcode.json" << std::endl;
-	      throw ;
-      }
+  // Открываем файл обмена, путь к которому указан в настройках
+  std::ifstream input_json;
+  if (!input_json.good())
+  {
+    std::cerr << "Не возможно прочитать файл штрихкодов barcode.json" << std::endl;
+    throw;
+  }
 
-      input_json.open("barcode.json", std::ios::binary);
-      
-      // Загружаем и парсим JSON документ
-      json::Document doc = json::Load(input_json);
-      json::Array arr = doc.GetRoot().AsArray();
-      
-      // Переменные для хранения текущего штрихкода и названия продукта
-      std::string barcode;
-      std::string name_product;
-      
-      // Проходим по каждому элементу массива (каждый элемент - это объект с данными о продукте)
-      for (const auto& elem: arr){
-	// Проходим по ключам объекта
-	for(const auto& [key, value]: elem.AsMap()){
-	  // Если ключ "barcode", сохраняем значение
-	  if(key == "barcode"s){
-	    barcode = value.AsString();
-	  }
-	  // Если ключ "name_product", сохраняем значение
-	  if(key == "name_product"s){
-	    name_product = value.AsString();
-	  }
+  input_json.open("barcode.json", std::ios::binary);
+
+  // Загружаем и парсим JSON документ
+  json::Document doc = json::Load(input_json);
+  json::Array arr = doc.GetRoot().AsArray();
+
+  // Переменные для хранения текущего штрихкода и названия продукта
+  std::string barcode;
+  std::string name_product;
+
+  // Проходим по каждому элементу массива (каждый элемент - это объект с данными о продукте)
+  for (const auto &elem : arr)
+  {
+    // Проходим по ключам объекта
+    for (const auto &[key, value] : elem.AsMap())
+    {
+      // Если ключ "barcode", сохраняем значение
+      if (key == "barcode"s)
+      {
+        barcode = value.AsString();
       }
-	// Добавляем найденную пару (название продукта, штрихкод) в систему управления лифтом
-	ec.AddBarcode(name_product, barcode);
-	
+      // Если ключ "name_product", сохраняем значение
+      if (key == "name_product"s)
+      {
+        name_product = value.AsString();
       }
+    }
+    // Добавляем найденную пару (название продукта, штрихкод) в систему управления лифтом
+    ec.AddBarcode(name_product, barcode);
+  }
 }
 
 /**
@@ -58,117 +63,157 @@ void JsonReader::FilligBarcodes(elevator_control::ElevatorControl& ec){
  * @param ec Ссылка на объект настроек, в который будут загружены настройки.
  * @throws std::runtime_error Если файл не может быть открыт или прочитан.
  */
-void JsonReader::LoadSettings(elevator_control::ElevatorControl& ec){
-      using namespace std::literals;
+void JsonReader::LoadSettings(elevator_control::ElevatorControl &ec)
+{
+  using namespace std::literals;
 
-      std::ifstream input_json;
-      try{
-	input_json.open("settings.json", std::ios::binary);
-	if (!input_json.good()) {
-        std::cerr << "Не возможно прочитать файл настроек settings.json" << std::endl;
-        throw ;
-	}
-      }
-      catch(...){
-        std::cerr << "Не возможно прочитать файл настроек settings.json" << std::endl;
-        throw ;
-      } 
-      
-      elevator_control::Settings settings;
-      
-      json::Document doc = json::Load(input_json);
-      json::Dict dict = doc.GetRoot().AsMap();
-	for(const auto& [key, value]: dict){
-	   if(key == "scanner_enable"){
-	     settings.scanner_enable = value.AsBool();
-	  }
-	  else if(key == "server_address"){
-	    settings.server_address = value.AsString();
-	  }
-    else if(key == "scanner_num_com_port"){
-	    settings.scanner_num_com_port = value.AsInt();
-	  }
-	  else if(key == "scanner_baud_rate"){
-	    settings.scanner_baud_rate = value.AsInt();
-	  }
-	  else if(key == "scanner_parity"){
-	    settings.scanner_parity = value.AsString();
-	  }
-	  else if(key == "scanner_data_bits"){
-	    settings.scanner_data_bits = value.AsInt();
-	  }
-	  else if(key == "scanner_stop_bits"){
-	    settings.scanner_stop_bits = value.AsString();
-	  }
-	  else if(key == "scanner_linux_com_port"){
-	    settings.scanner_linux_com_port = value.AsString();
-	  }
-	  else if(key == "display_width"){
-	    settings.display_width = value.AsInt();
-	  }
-	  else if(key == "display_height"){
-	    settings.display_height = value.AsInt();
-	  }
-	  else if(key == "display_pin_reset"){
-	    settings.display_pin_reset = value.AsInt();
-	  }
-	  else if(key == "display_pin_rs"){
-	    settings.display_pin_rs = value.AsInt();
-	  }
-	  else if(key == "display_pin_en"){
-	    settings.display_pin_en = value.AsInt();
-	  }
-	  else if(key == "display_pin_cs1"){
-	    settings.display_pin_cs1 = value.AsInt();
-	  }
-	  else if(key == "display_pin_cs2"){
-	    settings.display_pin_cs2 = value.AsInt();
-	  }
-	  else if(key == "display_pin_d0"){
-	    settings.display_pin_d0 = value.AsInt();
-	  }
-	  else if(key == "display_pin_d1"){
-	    settings.display_pin_d1 = value.AsInt();
-	  }
-	  else if(key == "display_pin_d2"){
-	    settings.display_pin_d2 = value.AsInt();
-	  }
-	  else if(key == "display_pin_d3"){
-	    settings.display_pin_d3 = value.AsInt();
-	  }
-	  else if(key == "display_pin_d4"){
-	    settings.display_pin_d4 = value.AsInt();
-	  }
-	  else if(key == "display_pin_d5"){
-	    settings.display_pin_d5 = value.AsInt();
-	  }
-	  else if(key == "display_pin_d6"){
-	    settings.display_pin_d6 = value.AsInt();
-	  }
-	  else if(key == "display_pin_d7"){
-	    settings.display_pin_d7 = value.AsInt();
-	  }
-	  else if(key == "display_pin_led"){
-	    settings.display_pin_led = value.AsInt();
-	  }
-      }
-      ec.SaveSettings(settings);	
+  std::ifstream input_json;
+  try
+  {
+    input_json.open("settings.json", std::ios::binary);
+    if (!input_json.good())
+    {
+      std::cerr << "Не возможно прочитать файл настроек settings.json" << std::endl;
+      throw;
+    }
+  }
+  catch (...)
+  {
+    std::cerr << "Не возможно прочитать файл настроек settings.json" << std::endl;
+    throw;
+  }
+
+  elevator_control::Settings settings;
+
+  json::Document doc = json::Load(input_json);
+  json::Dict dict = doc.GetRoot().AsMap();
+  for (const auto &[key, value] : dict)
+  {
+    if (key == "device_id")
+    {
+      settings.device_id = value.AsInt();
+    }
+    if (key == "scanner_enable")
+    {
+      settings.scanner_enable = value.AsBool();
+    }
+    if (key == "userpassword")
+    {
+      settings.userpassword = value.AsString();
+    }
+    else if (key == "server_address")
+    {
+      settings.server_address = value.AsString();
+    }
+    else if (key == "scanner_num_com_port")
+    {
+      settings.scanner_num_com_port = value.AsInt();
+    }
+    else if (key == "scanner_baud_rate")
+    {
+      settings.scanner_baud_rate = value.AsInt();
+    }
+    else if (key == "scanner_parity")
+    {
+      settings.scanner_parity = value.AsString();
+    }
+    else if (key == "scanner_data_bits")
+    {
+      settings.scanner_data_bits = value.AsInt();
+    }
+    else if (key == "scanner_stop_bits")
+    {
+      settings.scanner_stop_bits = value.AsString();
+    }
+    else if (key == "scanner_linux_com_port")
+    {
+      settings.scanner_linux_com_port = value.AsString();
+    }
+    else if (key == "display_width")
+    {
+      settings.display_width = value.AsInt();
+    }
+    else if (key == "display_height")
+    {
+      settings.display_height = value.AsInt();
+    }
+    else if (key == "display_pin_reset")
+    {
+      settings.display_pin_reset = value.AsInt();
+    }
+    else if (key == "display_pin_rs")
+    {
+      settings.display_pin_rs = value.AsInt();
+    }
+    else if (key == "display_pin_en")
+    {
+      settings.display_pin_en = value.AsInt();
+    }
+    else if (key == "display_pin_cs1")
+    {
+      settings.display_pin_cs1 = value.AsInt();
+    }
+    else if (key == "display_pin_cs2")
+    {
+      settings.display_pin_cs2 = value.AsInt();
+    }
+    else if (key == "display_pin_d0")
+    {
+      settings.display_pin_d0 = value.AsInt();
+    }
+    else if (key == "display_pin_d1")
+    {
+      settings.display_pin_d1 = value.AsInt();
+    }
+    else if (key == "display_pin_d2")
+    {
+      settings.display_pin_d2 = value.AsInt();
+    }
+    else if (key == "display_pin_d3")
+    {
+      settings.display_pin_d3 = value.AsInt();
+    }
+    else if (key == "display_pin_d4")
+    {
+      settings.display_pin_d4 = value.AsInt();
+    }
+    else if (key == "display_pin_d5")
+    {
+      settings.display_pin_d5 = value.AsInt();
+    }
+    else if (key == "display_pin_d6")
+    {
+      settings.display_pin_d6 = value.AsInt();
+    }
+    else if (key == "display_pin_d7")
+    {
+      settings.display_pin_d7 = value.AsInt();
+    }
+    else if (key == "display_pin_led")
+    {
+      settings.display_pin_led = value.AsInt();
+    }
+  }
+  ec.SaveSettings(settings);
 }
 
-void JsonReader::StartBackgroundSender(elevator_control::ElevatorControl& ec) {
-    // Проверяем, не запущен ли уже поток
-    if (background_thread_sender_.joinable()) {
-        std::cerr << "Фоновый поток уже запущен!" << std::endl;
-        return;
-    }
+void JsonReader::StartBackgroundSender(elevator_control::ElevatorControl &ec)
+{
+  // Проверяем, не запущен ли уже поток
+  if (background_thread_sender_.joinable())
+  {
+    std::cerr << "Фоновый поток уже запущен!" << std::endl;
+    return;
+  }
 
-    elevator_control::Settings settings = ec.GetSettings();
-    
-    // Сбрасываем флаг остановки
-    stop_flag_sender_.store(false);
+  elevator_control::Settings settings = ec.GetSettings();
 
-    // Запускаем новый поток
-    background_thread_sender_ = std::thread([this, &ec, &settings]() {
+  // Сбрасываем флаг остановки
+  stop_flag_sender_.store(false);
+
+  // Запускаем новый поток
+  background_thread_sender_ = std::thread([this, &ec, &settings]()
+                                          {
         using namespace std::chrono_literals;
         
         while (!stop_flag_sender_.load()) {
@@ -186,33 +231,35 @@ void JsonReader::StartBackgroundSender(elevator_control::ElevatorControl& ec) {
                 std::cout << "Создан транспортный пакет: " << filename << std::endl;
                 
                 // Отправляем пакет
-                network_client::SendTransportPackage(settings.server_address, filename);
+                network_client::SendTransportPackage(settings.server_address, filename, settings.userpassword);
                 std::cout << "Транспортный пакет отправлен: " << filename << std::endl;
             } catch (const std::exception& e) {
                 std::cerr << "Ошибка при создании или отправке транспортного пакета: " << e.what() << std::endl;
             } catch (...) {
                 std::cerr << "Неизвестная ошибка при создании или отправке транспортного пакета" << std::endl;
             }
-        }
-    });
-    
-    std::cout << "Фоновый поток для отправки пакетов запущен." << std::endl;
+        } });
+
+  std::cout << "Фоновый поток для отправки пакетов запущен." << std::endl;
 }
 
-void JsonReader::StartBackgroundDownloadBarcode(elevator_control::ElevatorControl& ec) {
-    // Проверяем, не запущен ли уже поток
-    if (background_thread_barcode_.joinable()) {
-        std::cerr << "Фоновый поток уже запущен!" << std::endl;
-        return;
-    }
+void JsonReader::StartBackgroundDownloadBarcode(elevator_control::ElevatorControl &ec)
+{
+  // Проверяем, не запущен ли уже поток
+  if (background_thread_barcode_.joinable())
+  {
+    std::cerr << "Фоновый поток уже запущен!" << std::endl;
+    return;
+  }
 
-    elevator_control::Settings settings = ec.GetSettings();
+  elevator_control::Settings settings = ec.GetSettings();
 
-    // Сбрасываем флаг остановки
-    stop_flag_barcode_.store(false);
+  // Сбрасываем флаг остановки
+  stop_flag_barcode_.store(false);
 
-    // Запускаем новый поток
-    background_thread_barcode_ = std::thread([this, settings]() {
+  // Запускаем новый поток
+  background_thread_barcode_ = std::thread([this, settings]()
+                                           {
         using namespace std::chrono_literals;
         
         while (!stop_flag_barcode_.load()) {
@@ -224,8 +271,7 @@ void JsonReader::StartBackgroundDownloadBarcode(elevator_control::ElevatorContro
             
             try { 
                 // Получаем штрихкоды
-                network_client::DownloadBarcodeJsonData(settings.server_address, "barcode.json") ;
-                std::cout << "Штрихкоды сохранены в файле: " << "barcode.json" << std::endl;
+                network_client::DownloadBarcodeJsonData(settings.server_address, "barcode.json", settings.userpassword);
             } catch (const std::exception& e) {
                 std::cerr << "Ошибка при сохранении файла: " << e.what() << std::endl;
             } catch (...) {
@@ -233,10 +279,9 @@ void JsonReader::StartBackgroundDownloadBarcode(elevator_control::ElevatorContro
               // Ждем 60 минут
             }
             std::this_thread::sleep_for(6000s);
-        }
-    });
-    
-    std::cout << "Фоновый поток для отправки пакетов запущен." << std::endl;
+        } });
+
+  std::cout << "Фоновый поток для отправки пакетов запущен." << std::endl;
 }
 
 /**
@@ -249,8 +294,9 @@ void JsonReader::StartBackgroundDownloadBarcode(elevator_control::ElevatorContro
  * @return Имя созданного файла пакета.
  */
 // Возвращает имя создаваемого пакета
-std::string JsonReader::SaveTransportPackage(elevator_control::ElevatorControl& ec){
- 
+std::string JsonReader::SaveTransportPackage(elevator_control::ElevatorControl &ec)
+{
+
   using namespace std::literals;
   std::chrono::time_point<std::chrono::system_clock> time = std::chrono::system_clock::now();
   time_t now_t = std::chrono::system_clock::to_time_t(time);
@@ -262,26 +308,20 @@ std::string JsonReader::SaveTransportPackage(elevator_control::ElevatorControl& 
 
   // Заполнение пакета
   elevator_control::TransportPacket tp;
-  
+
   tp.id = ec.GetTransportPacketId();
   tp.time_point = std::to_string(now_t);
   tp.array_barcodes = std::move(ec.GetBarcodesToSend());
 
-  std::vector<Node> tmp_v {tp.array_barcodes.begin(), tp.array_barcodes.end()};
+  std::vector<Node> tmp_v{tp.array_barcodes.begin(), tp.array_barcodes.end()};
 
-  //Создание JSON файла
-   auto result = json::Builder{}.StartDict() 
-     .Key("id"s).Value(tp.id)
-     .Key("time_point"s).Value(tp.time_point)
-     .Key("array_barcodes").Value(tmp_v).EndDict().Build(); 
+  // Создание JSON файла
+  auto result = json::Builder{}.StartDict().Key("id"s).Value(tp.id).Key("time_point"s).Value(tp.time_point).Key("array_barcodes").Value(tmp_v).EndDict().Build();
 
-    json::Document doc = json::Document(result);
-    json::Print(doc, out);
+  json::Document doc = json::Document(result);
+  json::Print(doc, out);
 
-    ec.IncTrasportPacketId();
+  ec.IncTrasportPacketId();
 
-    return name_file;
-    
+  return name_file;
 }
-
-
