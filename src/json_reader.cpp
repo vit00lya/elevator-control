@@ -309,19 +309,22 @@ std::string JsonReader::SaveTransportPackage(elevator_control::ElevatorControl &
   // Заполнение пакета
   elevator_control::TransportPacket tp;
 
-  tp.id = ec.GetTransportPacketId();
+  tp.id = std::to_string(ec.GetTransportPacketId());
+  tp.dev_id = std::to_string(ec.GetSettings().device_id);
   tp.time_point = std::to_string(now_t);
   tp.array_barcodes = std::move(ec.GetBarcodesToSend());
+
 
   std::vector<Node> tmp_v{tp.array_barcodes.begin(), tp.array_barcodes.end()};
 
   // Создание JSON файла
-  auto result = json::Builder{}.StartDict().Key("id"s).Value(tp.id).Key("time_point"s).Value(tp.time_point).Key("array_barcodes").Value(tmp_v).EndDict().Build();
+  auto result = json::Builder{}.StartDict().Key("id"s).Value(tp.id).Key("dev_id"s).Value(tp.dev_id).Key("time_point"s).Value(tp.time_point).Key("array_barcodes").Value(tmp_v).EndDict().Build();
 
   json::Document doc = json::Document(result);
   json::Print(doc, out);
 
   ec.IncTrasportPacketId();
+  ec.ClearBarcodeToSend();
 
   return name_file;
 }

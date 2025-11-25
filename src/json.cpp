@@ -356,7 +356,7 @@ bool Node::IsInt() const{
     return (std::get_if<int>(&data_));
 }
 
-  bool Node::IsLong() const{
+bool Node::IsLong() const{
 
     return (std::get_if<long>(&data_));
 }

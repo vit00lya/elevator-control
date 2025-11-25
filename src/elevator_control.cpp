@@ -15,9 +15,13 @@ void ElevatorControl::AddBarcode(std::string& name_product, std::string& barcode
 
 /// @brief Добавляет штрихкод в очередь для отправки
 /// @param barcode Штрихкод для отправки
-void ElevatorControl::AddBarcodeToSend(std::string& barcode, std::string& input_string){
-     pair_barcodes pair_barcode = {barcode, input_string};
-     barcodes_to_send_.push_back(pair_barcode);
+void ElevatorControl::AddBarcodeToSend(std::string& input_string){
+     barcodes_to_send_.push_back(input_string);
+}
+
+/// @brief Очищает очередь для отправки штрихкодов
+void ElevatorControl::ClearBarcodeToSend(){
+     barcodes_to_send_.clear();
 }
 
 /// @brief Возвращает идентификатор транспортного пакета
@@ -37,7 +41,7 @@ bool ElevatorControl::EmptyBarcodesToSend(){
   return barcodes_to_send_.empty();
 }
 
-std::vector<pair_barcodes> ElevatorControl::GetBarcodesToSend(){
+std::vector<std::string> ElevatorControl::GetBarcodesToSend(){
   return barcodes_to_send_;
 }
 

@@ -11,13 +11,11 @@
 
 namespace elevator_control{
 
-  typedef std::pair<std::string,std::string> pair_barcodes;
-
   struct TransportPacket{
-    long id;
-    long dev_id;
+    std::string id;
+    std::string dev_id;
     std::string time_point;
-    std::vector<pair_barcodes> array_barcodes;
+    std::vector<std::string> array_barcodes;
   };
   
     struct HasherBarcode {
@@ -65,20 +63,21 @@ namespace elevator_control{
     ElevatorControl() = default;
     void AddBarcode(std::string& name_product, std::string& barcode);
     std::optional<std::string_view> GetNameProduct(std::string_view barcode);
-    void AddBarcodeToSend(std::string& barcode, std::string& input_string);
+    void AddBarcodeToSend(std::string& input_string);
     long GetTransportPacketId();
     void IncTrasportPacketId();
     bool EmptyBarcodesToSend();
-    std::vector<pair_barcodes> GetBarcodesToSend();
+    std::vector<std::string> GetBarcodesToSend();
     void SaveSettings(Settings& settings);
     Settings GetSettings();
+    void ClearBarcodeToSend();
  
     
   private:
     std::deque<std::string> names_products_;
     std::deque<std::string> barcodes_;
     std::unordered_map<std::string_view, std::string_view, HasherBarcode> barcode_map_;
-    std::vector<pair_barcodes> barcodes_to_send_;
+    std::vector<std::string> barcodes_to_send_;
     Settings settings_;
     long transport_packet_id_ = 0;
 

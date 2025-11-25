@@ -34,7 +34,7 @@ namespace input_reader
     }
     else if (line[0] == '(' && line[1] == '0' && line[2] == '1' && line[3] == ')')
     {
-        for (size_t i = 4; i < 17; ++i)
+        for (size_t i = 5; i < 18; ++i)
         { 
           result.push_back(line[i]);
         }

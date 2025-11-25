@@ -84,6 +84,8 @@ int main()
       std::cin >> input_string;
     }
 
+    if(input_string == ""s) continue;
+
     try
     {
       barcode = ir.ParseLine(input_string);
@@ -104,6 +106,7 @@ int main()
           print_display_text(L"Транспортный пакет записан.");
 #endif
           std::cout << "Транспортный пакет записан. Имя пакета:"s << name_pack << "\n";
+          continue;
         }
         catch (...)
         {
@@ -133,7 +136,7 @@ int main()
 #endif
           std::cout << "Неопознанный штрихкод"s << std::endl;
         }
-        ec.AddBarcodeToSend(barcode,input_string);
+        ec.AddBarcodeToSend(input_string);
       }
     }
     catch (const std::exception &e)
