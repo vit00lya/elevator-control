@@ -16,13 +16,12 @@ void JsonReader::FilligBarcodes(elevator_control::ElevatorControl &ec)
 
   // Открываем файл обмена, путь к которому указан в настройках
   std::ifstream input_json;
+  input_json.open("barcode.json", std::ios::binary);
   if (!input_json.good())
   {
     std::cerr << "Не возможно прочитать файл штрихкодов barcode.json" << std::endl;
     throw;
   }
-
-  input_json.open("barcode.json", std::ios::binary);
 
   // Загружаем и парсим JSON документ
   json::Document doc = json::Load(input_json);
@@ -197,51 +196,6 @@ void JsonReader::LoadSettings(elevator_control::ElevatorControl &ec)
   ec.SaveSettings(settings);
 }
 
-void JsonReader::StartBackgroundSender(elevator_control::ElevatorControl &ec)
-{
-  // Проверяем, не запущен ли уже поток
-  if (background_thread_sender_.joinable())
-  {
-    std::cerr << "Фоновый поток уже запущен!" << std::endl;
-    return;
-  }
-
-  elevator_control::Settings settings = ec.GetSettings();
-
-  // Сбрасываем флаг остановки
-  stop_flag_sender_.store(false);
-
-  // Запускаем новый поток
-  background_thread_sender_ = std::thread([this, &ec, &settings]()
-                                          {
-        using namespace std::chrono_literals;
-        
-        while (!stop_flag_sender_.load()) {
-            // Ждем 10 минут
-            std::this_thread::sleep_for(600s);
-            
-            // Проверяем еще раз флаг остановки после сна
-            if (stop_flag_sender_.load()) {
-                break;
-            }
-            
-            try {
-                // Создаем транспортный пакет
-                std::string filename = this->SaveTransportPackage(ec);
-                std::cout << "Создан транспортный пакет: " << filename << std::endl;
-                
-                // Отправляем пакет
-                network_client::SendTransportPackage(settings.server_address, filename, settings.userpassword);
-                std::cout << "Транспортный пакет отправлен: " << filename << std::endl;
-            } catch (const std::exception& e) {
-                std::cerr << "Ошибка при создании или отправке транспортного пакета: " << e.what() << std::endl;
-            } catch (...) {
-                std::cerr << "Неизвестная ошибка при создании или отправке транспортного пакета" << std::endl;
-            }
-        } });
-
-  std::cout << "Фоновый поток для отправки пакетов запущен." << std::endl;
-}
 
 void JsonReader::StartBackgroundDownloadBarcode(elevator_control::ElevatorControl &ec)
 {

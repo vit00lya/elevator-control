@@ -29,6 +29,7 @@ int main()
   settings = ec.GetSettings();
 
   jr.StartBackgroundDownloadBarcode(ec);
+  ec.SendTransportPackage_RoutineAssignment();
 
 #if EXTERNAL_DISPLAY
   InitDisplay(settings);

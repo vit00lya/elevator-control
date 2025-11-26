@@ -90,5 +90,10 @@ namespace test{
     void Checking_route_in_which_the_distance_is_set_only_in_one_way();
 
     void TestTransportCatalogue();
+    
+    // Тесты для ElevatorControl
+    void TestReadAndDeleteFilesByMask();
+    
+    void TestElevatorControl();
 
 }

@@ -10,5 +10,5 @@ namespace network_client{
  * @return true в случае успеха, false в случае ошибки
  */
 bool DownloadBarcodeJsonData(const std::string& url, const std::string& filename, const std::string& userpassword);
-void SendTransportPackage(const std::string& url, const std::string& filename, const std::string& userpassword);
+bool SendTransportPackage(const std::string& url, const std::string& data, const std::string& userpassword);
 }

@@ -71,6 +71,87 @@ std::optional<std::string_view> ElevatorControl::GetNameProduct(std::string_view
   return {};
 }
 
+void ElevatorControl::SendTransportPackage_RoutineAssignment(){
+   if (background_thread_sender_.joinable())
+  {
+    std::cerr << "Фоновый поток уже запущен!" << std::endl;
+    return;
+  }
+
+  elevator_control::Settings settings = GetSettings();
+
+  // Сбрасываем флаг остановки
+  stop_flag_sender_.store(false);
+
+  // Запускаем новый поток
+  background_thread_sender_ = std::thread([this, &settings]()
+                                          {
+        using namespace std::chrono_literals;
+        
+        while (!stop_flag_sender_.load()) {
+            
+            // Проверяем еще раз флаг остановки после сна
+            if (stop_flag_sender_.load()) {
+                break;
+            }
+            
+            try {
+              ReadAndDeleteFilesByMask("tranport_package_");
+            } catch (const std::exception& e) {
+                std::cerr << "Ошибка при создании или отправке транспортного пакета: " << e.what() << std::endl;
+            } catch (...) {
+                std::cerr << "Неизвестная ошибка при создании или отправке транспортного пакета" << std::endl;
+            }
+            // Ждем 10 минут
+            std::this_thread::sleep_for(600s);
+        } });
+
+  std::cout << "Фоновый поток для отправки пакетов запущен." << std::endl;
+}
+
+/// @brief Читает файлы по указанной маске и удаляет их
+/// @param mask Маска для поиска файлов
+void ElevatorControl::ReadAndDeleteFilesByMask(const std::string& mask) {
+    try {
+    
+        // Определяем директорию для поиска (текущая директория)
+        std::filesystem::path searchDir = std::filesystem::current_path();
+        
+        // Итерируемся по файлам в директории
+        for (const auto& entry : std::filesystem::directory_iterator(searchDir)) {
+            if (entry.is_regular_file()) {
+                std::string filename = entry.path().filename().string();
+                
+                // Проверяем, соответствует ли файл маске
+                if (filename.find(mask) != filename.npos) {
+                    std::cout << "Processing file: " << filename << std::endl;
+                    
+                    // Читаем содержимое файла
+                    std::ifstream file(entry.path(), std::ios::binary);
+                    if (file.is_open()) {
+                        // Читаем содержимое файла
+                        std::string content((std::istreambuf_iterator<char>(file)),
+                                           std::istreambuf_iterator<char>());
+                        file.close();
+                        
+                        network_client::SendTransportPackage(GetSettings().server_address,filename,GetSettings().userpassword);
+                        
+                        // Удаляем файл
+                        if (std::filesystem::remove(entry.path())) {
+                            std::cout << "File deleted: " << filename << std::endl;
+                        } else {
+                            std::cerr << "Failed to delete file: " << filename << std::endl;
+                        }
+                    } else {
+                        std::cerr << "Failed to open file: " << filename << std::endl;
+                    }
+                }
+            }
+        }
+    } catch (const std::exception& e) {
+        std::cerr << "Error in ReadAndDeleteFilesByMask: " << e.what() << std::endl;
+    }
+}
 
 
 

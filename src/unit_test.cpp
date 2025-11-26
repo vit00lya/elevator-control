@@ -218,27 +218,47 @@ template<typename TestFunc>
     }
 
 
-    void test::TestTransportCatalogue() {
-        RUN_TEST(Adding_the_correct_new_stop);
-        RUN_TEST(Adding_a_new_stop_without_a_name);
-        RUN_TEST(Add_stop_again);
-        //
-        RUN_TEST(Search_for_stop_without_name);
-        RUN_TEST(Search_for_an_existing_stop);
-        //
-        RUN_TEST(Adding_the_correct_route);
-        RUN_TEST(Adding_a_route_with_an_empty_stop);
-        RUN_TEST(Adding_a_route_with_an_unknown_stop);
-        //
-        RUN_TEST(Search_for_an_existing_route);
-        RUN_TEST(Search_for_not_added_route);
+    
+        void test::TestTransportCatalogue() {
+            RUN_TEST(Adding_the_correct_new_stop);
+            RUN_TEST(Adding_a_new_stop_without_a_name);
+            RUN_TEST(Add_stop_again);
+            //
+            RUN_TEST(Search_for_stop_without_name);
+            RUN_TEST(Search_for_an_existing_stop);
+            //
+            RUN_TEST(Adding_the_correct_route);
+            RUN_TEST(Adding_a_route_with_an_empty_stop);
+            RUN_TEST(Adding_a_route_with_an_unknown_stop);
+            //
+            RUN_TEST(Search_for_an_existing_route);
+            RUN_TEST(Search_for_not_added_route);
+    
+            RUN_TEST(Check_for_unique_stops);
+            RUN_TEST(Checking_route_in_which_the_distance_is_set_only_in_one_way);
+            RUN_TEST(Checking_the_correctness_of_input_data_processing);
+        }
+        
+        void TestElevatorControl() {
+            RUN_TEST(TestReadAndDeleteFilesByMask);
+        }
 
-        RUN_TEST(Check_for_unique_stops);
-        RUN_TEST(Checking_route_in_which_the_distance_is_set_only_in_one_way);
-        RUN_TEST(Checking_the_correctness_of_input_data_processing);
+    // Тесты для ElevatorControl
+    void test::TestReadAndDeleteFilesByMask() {
+        // Создаем тестовый экземпляр ElevatorControl
+        elevator_control::ElevatorControl ec;
+        
+        // Проверяем, что функция не вызывает исключений
+        try {
+            ec.ReadAndDeleteFilesByMask("tranport_package_test_");
+            // Если мы дошли до этой точки, значит функция не вызвала исключений
+            std::cerr << "TestReadAndDeleteFilesByMask: OK" << std::endl;
+        } catch (const std::exception& e) {
+            // Если возникло исключение, тест считается проваленным
+            std::cerr << "TestReadAndDeleteFilesByMask: FAILED with exception: " << e.what() << std::endl;
+            abort();
+        }
     }
-
-
 
 
 

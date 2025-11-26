@@ -8,6 +8,13 @@
 #include <vector>
 #include <fstream>
 #include <cstdint>
+#include <thread>
+#include <chrono>
+#include <atomic>
+#include <iostream>
+#include <filesystem>
+#include <regex>
+#include "network_client.h"
 
 namespace elevator_control{
 
@@ -71,15 +78,18 @@ namespace elevator_control{
     void SaveSettings(Settings& settings);
     Settings GetSettings();
     void ClearBarcodeToSend();
+    void SendTransportPackage_RoutineAssignment();
+    void ReadAndDeleteFilesByMask(const std::string& mask);
  
     
   private:
+    std::thread background_thread_sender_; 
+    std::atomic<bool> stop_flag_sender_{false}; 
     std::deque<std::string> names_products_;
     std::deque<std::string> barcodes_;
     std::unordered_map<std::string_view, std::string_view, HasherBarcode> barcode_map_;
     std::vector<std::string> barcodes_to_send_;
     Settings settings_;
     long transport_packet_id_ = 0;
-
   };
 }

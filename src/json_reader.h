@@ -24,7 +24,6 @@ namespace jsonreader
         void FilligBarcodes(elevator_control::ElevatorControl& ec);
         void LoadSettings(elevator_control::ElevatorControl& ec);
         std::string SaveTransportPackage(elevator_control::ElevatorControl& ec);
-        void SendTransportPackage(const std::string& filename);
         
         // Методы для управления фоновой отправкой пакетов
         /**
@@ -39,8 +38,6 @@ namespace jsonreader
         void StartBackgroundDownloadBarcode(elevator_control::ElevatorControl& ec);
 
     private:
-        std::thread background_thread_sender_; 
-        std::atomic<bool> stop_flag_sender_{false}; 
         std::thread background_thread_barcode_; 
         std::atomic<bool> stop_flag_barcode_{false}; 
     };

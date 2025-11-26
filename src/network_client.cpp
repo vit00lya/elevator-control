@@ -84,10 +84,11 @@ bool network_client::DownloadBarcodeJsonData(const std::string& url, const std::
  * Использует библиотеку libcurl для выполнения HTTP POST запроса с файлом в виде multipart/form-data.
  * После отправки выводит код ответа и текст ответа сервера.
  *
- * @param filename Путь к файлу транспортного пакета, который нужно отправить.
  * @param url Адрес сервера
+ * @param data данные транспортного пакета json/xml
+ * @param userpassword имя пользователя/пароль
  */
-void network_client::SendTransportPackage(const std::string& url, const std::string& filename, const std::string& userpassword) {
+bool network_client::SendTransportPackage(const std::string& url, const std::string& data, const std::string& userpassword) {
     CURL* curl;
     CURLcode res;
     std::string response_string;
@@ -97,21 +98,15 @@ void network_client::SendTransportPackage(const std::string& url, const std::str
     
         curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
 
-        // Set the form data
-        curl_mime *form = NULL;
-        curl_mimepart *field = NULL;
-        form = curl_mime_init(curl);
-        
-        field = curl_mime_addpart(form);
-        curl_mime_name(field, "file");
-        curl_mime_filedata(field, filename.c_str());
-        
-        curl_easy_setopt(curl, CURLOPT_MIMEPOST, form);
+        struct curl_slist* headers = NULL;
+        headers = curl_slist_append(headers, "Content-Type: application/json");
+        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+        curl_easy_setopt(curl, CURLOPT_POST, 1L);
         curl_easy_setopt(curl, CURLOPT_USERPWD, userpassword.c_str());
 
         // Set the callback function to handle the response
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response_string);
+        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data.c_str());
+        curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, data.length());
 
         // Perform the request
         res = curl_easy_perform(curl);
@@ -119,15 +114,19 @@ void network_client::SendTransportPackage(const std::string& url, const std::str
         // Check for errors
         if (res != CURLE_OK) {
             std::cerr << "curl_easy_perform() ошибка: " << curl_easy_strerror(res) << std::endl;
+            return false;
         } else {
-            long response_code;
-            curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response_code);
-            std::cout << "Код ответа: " << response_code << std::endl;
+            long http_code = 0;
+            curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
+            std::cout << "Код ответа: " << http_code << std::endl;
             std::cout << "Ответ: " << response_string << std::endl;
+            if(http_code != 200) {
+                return false;
+            }
         }
-
         // Cleanup
-        curl_mime_free(form);
         curl_easy_cleanup(curl);
+        return true;
     }
+    return false;
 }
