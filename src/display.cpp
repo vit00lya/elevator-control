@@ -61,14 +61,14 @@ std::vector<std::wstring> GetStrings(const std::wstring& str){
  * @param str Текст для вывода
  * @param wait Флаг, указывающий, нужно ли ждать после вывода (по умолчанию true)
  */
-void PrintDisplayText(const std::wstring& str, bool wait = true){
+void PrintDisplayText(const std::wstring& str, long wait){
   
   clearScreen();
   std::vector<std::wstring> lines = GetStrings(str);
   PrintLines(lines);
   syncBuffer();
-  if(wait){
-    delay(5000);
+  if(wait != 0){
+    delay(wait * 1000);
   }
 }
 
@@ -78,9 +78,6 @@ void PrintDisplayText(const std::wstring& str, bool wait = true){
  * @param settings Ссылка на структуру настроек
  */
 void InitDisplay(elevator_control::Settings& settings){
-
-  if(setupWiringRP(WRP_MODE_PHYS) < 0)
-         exit(EXIT_FAILURE);
 
     init(settings.display_width,
         settings.display_height,
@@ -111,7 +108,7 @@ void InitDisplay(elevator_control::Settings& settings){
 /**
  * @brief Освобождает ресурсы WiringRP и выключает подсветку дисплея
  */
-void ReleaseWiringRP(){
+void ReleaseWiringRP(int sig){
   clearScreen();
   ledOff();
   releaseWiringRP();

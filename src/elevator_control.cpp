@@ -134,7 +134,7 @@ void ElevatorControl::ReadAndDeleteFilesByMask(const std::string& mask) {
                                            std::istreambuf_iterator<char>());
                         file.close();
                         
-                        network_client::SendTransportPackage(GetSettings().server_address,filename,GetSettings().userpassword);
+                        network_client::SendTransportPackage(GetSettings().server_address,content,GetSettings().userpassword);
                         
                         // Удаляем файл
                         if (std::filesystem::remove(entry.path())) {

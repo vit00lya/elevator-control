@@ -192,6 +192,18 @@ void JsonReader::LoadSettings(elevator_control::ElevatorControl &ec)
     {
       settings.display_pin_led = value.AsInt();
     }
+    else if (key == "time_unlock_door")
+    {
+      settings.time_unlock_door = value.AsInt();
+    }
+    else if (key == "pin_unlock_door")
+    {
+      settings.pin_unlock_door = value.AsInt();
+    }
+    else if (key == "pin_close_door")
+    {
+      settings.pin_close_door = value.AsInt();
+    }
   }
   ec.SaveSettings(settings);
 }

@@ -1,8 +1,8 @@
 {
-    "device_id":0,
-    "server_address":"",
+    "device_id":1,
     "userpassword":"",
-    "scanner_enable":false,
+    "server_address":"",
+    "scanner_enable":true,
     "scanner_num_com_port":0,
     "scanner_baud_rate":9600,
     "scanner_parity":"COM_PORT_NOPARITY",
@@ -23,5 +23,9 @@
     "display_pin_d4":13,
     "display_pin_d5":15,
     "display_pin_d6":19,
-    "display_pin_d7":21
+    "display_pin_d7":21,
+    "display_pin_led":40,
+    "time_unlock_door":600,
+    "pin_unlock_door":35,
+    "pin_close_door":37
 }

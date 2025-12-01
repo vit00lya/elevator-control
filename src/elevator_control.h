@@ -62,6 +62,9 @@ namespace elevator_control{
      int display_pin_d6 = 0;
      int display_pin_d7 = 0;
      int display_pin_led = 0;
+     long time_unlock_door = 600;
+     int pin_unlock_door = 0;
+     int pin_close_door = 0;
         };
   
   class ElevatorControl{

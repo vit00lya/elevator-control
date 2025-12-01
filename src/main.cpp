@@ -12,6 +12,7 @@
 using namespace std::literals;
 
 #if EXTERNAL_DISPLAY
+#include "gpio.h"
 #include "display.h"
 #endif
 
@@ -32,6 +33,7 @@ int main()
   ec.SendTransportPackage_RoutineAssignment();
 
 #if EXTERNAL_DISPLAY
+  InitGpio(settings);
   InitDisplay(settings);
   signal(SIGINT, ReleaseWiringRP);
 #endif
@@ -94,26 +96,33 @@ int main()
       {
         if (ec.EmptyBarcodesToSend())
         {
-#if EXTERNAL_DISPLAY
+      #if EXTERNAL_DISPLAY
           PrintDisplayText(L"Список пуст, нечего отправлять.");
-#endif
+      #endif
           std::cout << "Список пуст, нечего отправлять."s << "\n";
           continue;
         }
         try
         {
           std::string name_pack = jr.SaveTransportPackage(ec);
-#if EXTERNAL_DISPLAY
-          print_display_text(L"Транспортный пакет записан.");
-#endif
+      #if EXTERNAL_DISPLAY
+          PrintDisplayText(L"Транспортный пакет записан.");
+          digitalWrite(settings.pin_unlock_door, HIGH); // Даем возможность нажать на кнопку открытия ворот
+          PrintDisplayText(L"Доступ открыт", settings.time_unlock_door);
+          digitalWrite(settings.pin_unlock_door, LOW); // Выключаем кнопку открытия ворот
+          digitalWrite(settings.pin_close_door, HIGH); // Закрываем ворота.
+          delay(1000);
+          digitalWrite(settings.pin_close_door, LOW);
+
+      #endif
           std::cout << "Транспортный пакет записан. Имя пакета:"s << name_pack << "\n";
           continue;
         }
         catch (...)
         {
-#if EXTERNAL_DISPLAY
+      #if EXTERNAL_DISPLAY
           PrintDisplayText(L"Ошибка при записи транспортного пакета в файл");
-#endif
+      #endif
           std::cerr << "Ошибка при записи транспортного пакета в файл"s << std::endl;
         }
       }
@@ -123,18 +132,18 @@ int main()
 
         if (name_product.has_value())
         {
-#if EXTERNAL_DISPLAY
+      #if EXTERNAL_DISPLAY
           std::string tmp_string = std::string(name_product.value());
           auto text_wstring = Utf8ToWchar(tmp_string.c_str());
           PrintDisplayText(text_wstring.c_str());
-#endif
+      #endif
           std::cout << name_product.value() << std::endl;
         }
         else
         {
-#if EXTERNAL_DISPLAY
+      #if EXTERNAL_DISPLAY
           PrintDisplayText(L"Неопознанный штрихкод");
-#endif
+      #endif
           std::cout << "Неопознанный штрихкод"s << std::endl;
         }
         ec.AddBarcodeToSend(input_string);

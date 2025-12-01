@@ -28,11 +28,13 @@ list(APPEND SOURCES
 if(EXTERNAL_DISPLAY)
 	list(PREPEND SOURCES 
 	src/display.cpp
-	src/display.h)
+	src/display.h
+	src/gpio.h
+	src/gpio.cpp)
 endif()
 
 add_executable(${TARGET} ${SOURCES})
-target_link_libraries(${TARGET} CURL::libcurl)   
+target_link_libraries(${TARGET} PRIVATE CURL::libcurl)   
 
 if(EXTERNAL_DISPLAY)
 	add_subdirectory(../WiringRP ${CMAKE_BINARY_DIR}/wrp)

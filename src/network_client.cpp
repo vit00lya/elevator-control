@@ -92,11 +92,12 @@ bool network_client::SendTransportPackage(const std::string& url, const std::str
     CURL* curl;
     CURLcode res;
     std::string response_string;
+    std::string url_plus_prefix = url + "/barcodes";
 
     curl = curl_easy_init();
     if (curl) {
     
-        curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+        curl_easy_setopt(curl, CURLOPT_URL, url_plus_prefix.c_str());
 
         struct curl_slist* headers = NULL;
         headers = curl_slist_append(headers, "Content-Type: application/json");
