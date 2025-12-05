@@ -19,8 +19,7 @@ void JsonReader::FilligBarcodes(elevator_control::ElevatorControl &ec)
   input_json.open("barcode.json", std::ios::binary);
   if (!input_json.good())
   {
-    std::cerr << "Не возможно прочитать файл штрихкодов barcode.json" << std::endl;
-    throw;
+    throw std::runtime_error("Не возможно прочитать файл штрихкодов barcode.json");
   }
 
   // Загружаем и парсим JSON документ
@@ -72,14 +71,12 @@ void JsonReader::LoadSettings(elevator_control::ElevatorControl &ec)
     input_json.open("settings.json", std::ios::binary);
     if (!input_json.good())
     {
-      std::cerr << "Не возможно прочитать файл настроек settings.json" << std::endl;
-      throw;
+      throw std::runtime_error("Не возможно прочитать файл настроек settings.json");
     }
   }
   catch (...)
   {
-    std::cerr << "Не возможно прочитать файл настроек settings.json" << std::endl;
-    throw;
+    throw std::runtime_error("Не возможно прочитать файл настроек settings.json");
   }
 
   elevator_control::Settings settings;
@@ -214,8 +211,7 @@ void JsonReader::StartBackgroundDownloadBarcode(elevator_control::ElevatorContro
   // Проверяем, не запущен ли уже поток
   if (background_thread_barcode_.joinable())
   {
-    std::cerr << "Фоновый поток уже запущен!" << std::endl;
-    return;
+    throw std::runtime_error("Фоновый поток уже запущен!");
   }
 
   elevator_control::Settings settings = ec.GetSettings();
@@ -234,20 +230,17 @@ void JsonReader::StartBackgroundDownloadBarcode(elevator_control::ElevatorContro
             if (stop_flag_barcode_.load()) {
                 break;
             }
-            
             try { 
                 // Получаем штрихкоды
                 network_client::DownloadBarcodeJsonData(settings.server_address, "barcode.json", settings.userpassword);
             } catch (const std::exception& e) {
-                std::cerr << "Ошибка при сохранении файла: " << e.what() << std::endl;
+                throw std::runtime_error("Ошибка при сохранении файла barcode.json");
             } catch (...) {
-                std::cerr << "Неизвестная ошибка при сохранения файла." << std::endl;
-              // Ждем 60 минут
+                throw std::runtime_error("Неизвестная ошибка при сохранения файла barcode.json");
             }
+            // Ждем 60 минут
             std::this_thread::sleep_for(6000s);
         } });
-
-  std::cout << "Фоновый поток для отправки пакетов запущен." << std::endl;
 }
 
 /**
@@ -270,7 +263,14 @@ std::string JsonReader::SaveTransportPackage(elevator_control::ElevatorControl &
   std::ofstream out;
   out.exceptions(std::ifstream::failbit | std::ifstream::badbit);
   auto name_file = "tranport_package_" + std::to_string(ec.GetTransportPacketId()) + "_" + std::to_string(now_t) + ".json";
-  out.open(name_file);
+  try
+  {
+    out.open(name_file);
+  }
+  catch(const std::exception& e)
+  {
+    throw std::runtime_error("Ошибка при создании файла транспортного пакета. Возможно закончилась память.");
+  }
 
   // Заполнение пакета
   elevator_control::TransportPacket tp;
@@ -279,7 +279,6 @@ std::string JsonReader::SaveTransportPackage(elevator_control::ElevatorControl &
   tp.dev_id = std::to_string(ec.GetSettings().device_id);
   tp.time_point = std::to_string(now_t);
   tp.array_barcodes = std::move(ec.GetBarcodesToSend());
-
 
   std::vector<Node> tmp_v{tp.array_barcodes.begin(), tp.array_barcodes.end()};
 

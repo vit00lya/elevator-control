@@ -36,6 +36,7 @@ namespace elevator_control{
     };
 
    struct Settings{
+     bool locked = false;
      long device_id = 0;
      std::string server_address = "";
      std::string userpassword = "";
@@ -83,16 +84,23 @@ namespace elevator_control{
     void ClearBarcodeToSend();
     void SendTransportPackage_RoutineAssignment();
     void ReadAndDeleteFilesByMask(const std::string& mask);
- 
+    void CheckGateBeedsLocked_RoutineAssignment();
+    void GetDoorIsLock_RoutineAssignment();
+    bool IsDoorLocked() const;
     
   private:
-    std::thread background_thread_sender_; 
-    std::atomic<bool> stop_flag_sender_{false}; 
+    std::thread background_thread_sender_;
+    std::thread background_thread_beeds_locked_;
+    std::thread background_thread_door_lock_;
+    std::atomic<bool> stop_flag_sender_{false};
+    std::atomic<bool> stop_flag_beeds_locked_{false};
+    std::atomic<bool> stop_flag_door_lock_{false};
     std::deque<std::string> names_products_;
     std::deque<std::string> barcodes_;
     std::unordered_map<std::string_view, std::string_view, HasherBarcode> barcode_map_;
     std::vector<std::string> barcodes_to_send_;
     Settings settings_;
     long transport_packet_id_ = 0;
+    bool door_lock_status_ = false;
   };
 }

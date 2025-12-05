@@ -1,8 +1,10 @@
 cmake_minimum_required(VERSION 3.18)
 project(ElevatorControl)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 17)
 set(TARGET ElevatorControl)
+
+include(CPM.cmake)
 
 # Find libcurl
 find_package(CURL REQUIRED)
@@ -34,7 +36,11 @@ if(EXTERNAL_DISPLAY)
 endif()
 
 add_executable(${TARGET} ${SOURCES})
-target_link_libraries(${TARGET} PRIVATE CURL::libcurl)   
+target_link_libraries(${TARGET} PRIVATE CURL::libcurl) 
+
+target_include_directories(${TARGET} PRIVATE
+	target_include_directories(${TARGET} PRIVATE "/usr/local/include/logit_cpp/")
+)
 
 if(EXTERNAL_DISPLAY)
 	add_subdirectory(../WiringRP ${CMAKE_BINARY_DIR}/wrp)

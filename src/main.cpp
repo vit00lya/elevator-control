@@ -1,23 +1,39 @@
-#include <iostream>
 #include <string>
 #include <string_view>
 #include <optional>
 #include <vector>
+#include <chrono>
+#include <thread>
 #include "input_reader.h"
 #include "elevator_control.h"
 #include "json_reader.h"
 #include "xserial.hpp"
 #include "magic_enum.hpp"
+#include <logit.hpp>
 
 using namespace std::literals;
 
 #if EXTERNAL_DISPLAY
 #include "gpio.h"
 #include "display.h"
+
+ void CheckСonditionDoor(elevator_control::ElevatorControl& ec){
+  if(ec.IsDoorLocked())
+    digitalWrite(settings.pin_unlock_door, HIGH);
+  else 
+    digitalWrite(settings.pin_unlock_door, LOW);
+    PrintDisplayText(L"Доступ открыт");
+ }
+
 #endif
 
 int main()
 {
+
+  LOGIT_ADD_CONSOLE_DEFAULT();
+  LOGIT_ADD_FILE_LOGGER_DEFAULT();
+  LOGIT_SET_MAX_QUEUE(50);
+  LOGIT_SET_QUEUE_POLICY(LOGIT_QUEUE_DROP_NEWEST);
 
   elevator_control::ElevatorControl ec;
   input_reader::InputReader ir;
@@ -33,6 +49,7 @@ int main()
   ec.SendTransportPackage_RoutineAssignment();
 
 #if EXTERNAL_DISPLAY
+  ec.CheckGateBeedsLocked_RoutineAssignment();
   InitGpio(settings);
   InitDisplay(settings);
   signal(SIGINT, ReleaseWiringRP);
@@ -59,10 +76,11 @@ int main()
 
   catch (...)
   {
-#if EXTERNAL_DISPLAY
-    PrintDisplayText(L"Не возможно прочитать штрихкоды, возможно не верная кодировка файла barcode.json", false);
-#endif
-    std::cerr << "Не возможно прочитать штрихкоды, возможно не верная кодировка файла barcode.json"s << std::endl;
+    #if EXTERNAL_DISPLAY
+        PrintDisplayText(L"Не возможно прочитать штрихкоды, возможно не верная кодировка файла barcode.json");
+    #endif
+
+    LOGIT_ERROR_THROTTLE(250, "Не возможно прочитать штрихкоды, возможно не верная кодировка файла barcode.json"s);
     return 1;
   }
 
@@ -73,17 +91,33 @@ int main()
   {
 
 #if EXTERNAL_DISPLAY
-    PrintDisplayText(L"Введите штрихкод", false);
+    CheckСonditionDoor(ec);
+    if(!ec.IsDoorLocked()){
+      delay(5*60*1000);
+      continue;
+    }
+    PrintDisplayText(L"Введите штрихкод");
 #endif
-    std::cout << "Введите штрихкод"s << "\n";
     input_string = ""s;
+    
+    // Таймер для прерывания ввода
+    auto start_time = std::chrono::steady_clock::now();
+    const auto timeout = std::chrono::seconds(600); // Таймаут 30 секунд
+    
     if (settings.scanner_enable)
     {
-      input_string = scanner.getLine();
-      scanner.flushRxAndTx();
+      while (std::chrono::steady_clock::now() - start_time < timeout) {
+        if (scanner.bytesToRead() > 0) { // Проверяем наличие данных
+          input_string = scanner.getLine();
+          scanner.flushRxAndTx();
+          break;
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(100)); // Небольшая задержка
+      }
     }
     else
     {
+      std::cout << "Введите штрихкод: ";
       std::cin >> input_string;
     }
 
@@ -99,15 +133,17 @@ int main()
       #if EXTERNAL_DISPLAY
           PrintDisplayText(L"Список пуст, нечего отправлять.");
       #endif
-          std::cout << "Список пуст, нечего отправлять."s << "\n";
+          LOGIT_INFO("Список пуст, нечего отправлять."s);
           continue;
         }
         try
         {
           std::string name_pack = jr.SaveTransportPackage(ec);
       #if EXTERNAL_DISPLAY
+          LOGIT_INFO("Транспортный пакет записан."s);
           PrintDisplayText(L"Транспортный пакет записан.");
           digitalWrite(settings.pin_unlock_door, HIGH); // Даем возможность нажать на кнопку открытия ворот
+          LOGIT_INFO("Доступ открыт."s);
           PrintDisplayText(L"Доступ открыт", settings.time_unlock_door);
           digitalWrite(settings.pin_unlock_door, LOW); // Выключаем кнопку открытия ворот
           digitalWrite(settings.pin_close_door, HIGH); // Закрываем ворота.
@@ -115,7 +151,7 @@ int main()
           digitalWrite(settings.pin_close_door, LOW);
 
       #endif
-          std::cout << "Транспортный пакет записан. Имя пакета:"s << name_pack << "\n";
+          LOGIT_INFO("Транспортный пакет записан."s, name_pack);
           continue;
         }
         catch (...)
@@ -123,7 +159,7 @@ int main()
       #if EXTERNAL_DISPLAY
           PrintDisplayText(L"Ошибка при записи транспортного пакета в файл");
       #endif
-          std::cerr << "Ошибка при записи транспортного пакета в файл"s << std::endl;
+          LOGIT_ERROR_THROTTLE(250, "Ошибка при записи транспортного пакета в файл."s);
         }
       }
       else
@@ -137,21 +173,21 @@ int main()
           auto text_wstring = Utf8ToWchar(tmp_string.c_str());
           PrintDisplayText(text_wstring.c_str());
       #endif
-          std::cout << name_product.value() << std::endl;
+          LOGIT_INFO("Переданный файл"s, name_product.value());
         }
         else
         {
       #if EXTERNAL_DISPLAY
           PrintDisplayText(L"Неопознанный штрихкод");
       #endif
-          std::cout << "Неопознанный штрихкод"s << std::endl;
+          LOGIT_INFO("Транспортный пакет записан.");
         }
         ec.AddBarcodeToSend(input_string);
       }
     }
     catch (const std::exception &e)
     {
-      std::cerr << e.what() << std::endl;
+      LOGIT_ERROR_THROTTLE(250, e.what());
     }
   }
 

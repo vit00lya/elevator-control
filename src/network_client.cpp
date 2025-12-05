@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 #include <curl/curl.h>
-
+#include <sstream>
 
 /**
  * @brief Callback-функция для записи данных ответа от сервера в строку.
@@ -50,7 +50,10 @@ bool network_client::DownloadBarcodeJsonData(const std::string& url, const std::
          
         // Проверка результата
         if(res != CURLE_OK) {
-            std::cerr << "Ошибка при выполнении запроса: " << curl_easy_strerror(res) << std::endl;
+            std::stringstream ss;
+            ss << "Ошибка при выполнении запроса: " << curl_easy_strerror(res);
+            throw std::runtime_error(ss.str());
+         
             return false;
         }
 
@@ -61,16 +64,19 @@ bool network_client::DownloadBarcodeJsonData(const std::string& url, const std::
         {
             std::ofstream outFile(filename);
             if (!outFile.is_open()) {
-                std::cerr << "Ошибка при открытии файла для записи: " << filename << std::endl;
+                std::stringstream ss;
+                ss << "Ошибка при открытии файла для записи: " << filename;
+                throw std::runtime_error(ss.str());
                 return false;
             }
             outFile << readBuffer;
             outFile.close();  
-            std::cerr << "Штрихкоды сохранены в файле: " << filename << std::endl;
             return true;
         }
         else{
-             std::cerr << "Ошибка при выполнении запроса. Код ответа: " << http_code << std::endl;
+            std::stringstream ss;
+            ss << "Ошибка при выполнении запроса. Код ответа: " << http_code;
+            throw std::runtime_error(ss.str());
         }
     }
         
@@ -129,5 +135,58 @@ bool network_client::SendTransportPackage(const std::string& url, const std::str
         curl_easy_cleanup(curl);
         return true;
     }
+    return false;
+}
+
+bool network_client::DoorIsLocked(const std::string& url, const std::string& userpassword) {
+    CURL* curl;
+    CURLcode res;
+    std::string readBuffer;
+    std::string url_plus_prefix = url + "/door_is_locked";
+    // Инициализация CURL
+    curl = curl_easy_init();
+    if(curl) {
+        // Установка URL
+        curl_easy_setopt(curl, CURLOPT_URL, url_plus_prefix.c_str());
+        curl_easy_setopt(curl, CURLOPT_USERPWD, userpassword.c_str());
+        curl_easy_setopt(curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+        
+        // Выполнение запроса
+        res = curl_easy_perform(curl);
+        
+        // Освобождение ресурсов
+        curl_easy_cleanup(curl);
+  
+        // Проверка результата
+        if(res != CURLE_OK) {
+            std::stringstream ss;
+            ss << "Ошибка при выполнении запроса: " << curl_easy_strerror(res);
+            throw std::runtime_error(ss.str());
+         
+            return false;
+        }
+
+        long http_code = 0;
+        CURLcode info_res = curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
+
+        if (http_code == 200)
+        {
+            std::stringstream ss;
+            ss << readBuffer;
+            std::string tmp = ss.str();
+            if (tmp.find("true") == std::string::npos){
+                return false;
+            }
+            else{
+                return true;
+            }
+        }
+        else{
+            std::stringstream ss;
+            ss << "Ошибка при выполнении запроса. Код ответа: " << http_code;
+            throw std::runtime_error(ss.str());
+        }
+    }
+        
     return false;
 }

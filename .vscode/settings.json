@@ -76,7 +76,16 @@
         "timer": "cpp",
         "future": "cpp",
         "mutex": "cpp",
-        "filesystem": "cpp"
+        "filesystem": "cpp",
+        "any": "cpp",
+        "cfenv": "cpp",
+        "complex": "cpp",
+        "csignal": "cpp",
+        "set": "cpp",
+        "source_location": "cpp",
+        "ranges": "cpp",
+        "typeindex": "cpp",
+        "expected": "cpp"
     },
 
     "cmake.configureOnOpen": true,

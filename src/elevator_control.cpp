@@ -109,6 +109,7 @@ void ElevatorControl::SendTransportPackage_RoutineAssignment(){
   std::cout << "Фоновый поток для отправки пакетов запущен." << std::endl;
 }
 
+
 /// @brief Читает файлы по указанной маске и удаляет их
 /// @param mask Маска для поиска файлов
 void ElevatorControl::ReadAndDeleteFilesByMask(const std::string& mask) {
@@ -152,6 +153,88 @@ void ElevatorControl::ReadAndDeleteFilesByMask(const std::string& mask) {
         std::cerr << "Error in ReadAndDeleteFilesByMask: " << e.what() << std::endl;
     }
 }
+
+void ElevatorControl::CheckGateBeedsLocked_RoutineAssignment(){
+   if (background_thread_beeds_locked_.joinable())
+  {
+    std::cerr << "Фоновый поток уже запущен!" << std::endl;
+    return;
+  }
+
+  elevator_control::Settings settings = GetSettings();
+
+  // Сбрасываем флаг остановки
+  stop_flag_beeds_locked_.store(false);
+
+  // Запускаем новый поток
+  background_thread_beeds_locked_ = std::thread([this, &settings]()
+                                          {
+        using namespace std::chrono_literals;
+        
+        while (!stop_flag_beeds_locked_.load()) {
+            
+            // Проверяем еще раз флаг остановки после сна
+            if (stop_flag_beeds_locked_.load()) {
+                break;
+            }
+            
+            try {
+             
+            } catch (const std::exception& e) {
+                std::cerr << "Ошибка при создании или отправке транспортного пакета: " << e.what() << std::endl;
+            } catch (...) {
+                std::cerr << "Неизвестная ошибка при создании или отправке транспортного пакета" << std::endl;
+            }
+            // Ждем 10 минут
+            std::this_thread::sleep_for(600s);
+        } });
+std::cout << "Фоновый поток для отправки пакетов запущен." << std::endl;
+}
+
+void ElevatorControl::GetDoorIsLock_RoutineAssignment(){
+   if (background_thread_door_lock_.joinable())
+  {
+    std::cerr << "Фоновый поток уже запущен!" << std::endl;
+    return;
+  }
+
+  Settings settings = GetSettings();
+
+  // Сбрасываем флаг остановки
+  stop_flag_door_lock_.store(false);
+
+  // Запускаем новый поток
+  background_thread_door_lock_ = std::thread([this, settings]()
+                                          {
+        using namespace std::chrono_literals;
+        
+        while (!stop_flag_door_lock_.load()) {
+            
+            // Проверяем еще раз флаг остановки после сна
+            if (stop_flag_door_lock_.load()) {
+                break;
+            }
+            
+            try {
+                bool door_locked = network_client::DoorIsLocked(settings.server_address, settings.userpassword);
+                // Сохраняем результат в переменную
+                door_lock_status_ = door_locked;
+            } catch (const std::exception& e) {
+                std::cerr << "Ошибка при получении статуса блокировки двери: " << e.what() << std::endl;
+            } catch (...) {
+                std::cerr << "Неизвестная ошибка при получении статуса блокировки двери" << std::endl;
+            }
+            // Ждем 10 минут
+            std::this_thread::sleep_for(600s);
+        } });
+
+  std::cout << "Фоновый поток для проверки блокировки двери запущен." << std::endl;
+}
+
+bool ElevatorControl::IsDoorLocked() const {
+    return door_lock_status_;
+}
+
 
 
 
