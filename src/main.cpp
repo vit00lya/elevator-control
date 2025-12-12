@@ -19,10 +19,11 @@ using namespace std::literals;
 
  void CheckСonditionDoor(elevator_control::ElevatorControl& ec){
   if(ec.IsDoorLocked())
-    digitalWrite(settings.pin_unlock_door, HIGH);
-  else 
-    digitalWrite(settings.pin_unlock_door, LOW);
+    digitalWrite(ec.GetSettings().pin_unlock_door, HIGH);
+  else {
+    digitalWrite(ec.GetSettings().pin_unlock_door, LOW);
     PrintDisplayText(L"Доступ открыт");
+    }
  }
 
 #endif
@@ -32,7 +33,7 @@ int main()
 
   LOGIT_ADD_CONSOLE_DEFAULT();
   LOGIT_ADD_FILE_LOGGER_DEFAULT();
-  LOGIT_SET_MAX_QUEUE(50);
+  LOGIT_SET_MAX_QUEUE(5);
   LOGIT_SET_QUEUE_POLICY(LOGIT_QUEUE_DROP_NEWEST);
 
   elevator_control::ElevatorControl ec;
@@ -47,14 +48,15 @@ int main()
 
   jr.StartBackgroundDownloadBarcode(ec);
   ec.SendTransportPackage_RoutineAssignment();
-
+  ec.GetDoorIsLock_RoutineAssignment();
+  
 #if EXTERNAL_DISPLAY
-  ec.CheckGateBeedsLocked_RoutineAssignment();
+ 
   InitGpio(settings);
   InitDisplay(settings);
   signal(SIGINT, ReleaseWiringRP);
 #endif
-
+	
   if (settings.scanner_enable)
   {
     if (!scanner.open((short)settings.scanner_num_com_port,
@@ -89,7 +91,7 @@ int main()
 
   while (true)
   {
-
+  LOGIT_INFO("Значение блокировки дверей:"s, ec.IsDoorLocked());
 #if EXTERNAL_DISPLAY
     CheckСonditionDoor(ec);
     if(!ec.IsDoorLocked()){

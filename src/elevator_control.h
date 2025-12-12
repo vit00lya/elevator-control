@@ -36,7 +36,6 @@ namespace elevator_control{
     };
 
    struct Settings{
-     bool locked = false;
      long device_id = 0;
      std::string server_address = "";
      std::string userpassword = "";
@@ -66,7 +65,7 @@ namespace elevator_control{
      long time_unlock_door = 600;
      int pin_unlock_door = 0;
      int pin_close_door = 0;
-        };
+};
   
   class ElevatorControl{
   public:
@@ -90,10 +89,8 @@ namespace elevator_control{
     
   private:
     std::thread background_thread_sender_;
-    std::thread background_thread_beeds_locked_;
     std::thread background_thread_door_lock_;
     std::atomic<bool> stop_flag_sender_{false};
-    std::atomic<bool> stop_flag_beeds_locked_{false};
     std::atomic<bool> stop_flag_door_lock_{false};
     std::deque<std::string> names_products_;
     std::deque<std::string> barcodes_;

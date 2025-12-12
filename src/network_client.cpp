@@ -142,7 +142,7 @@ bool network_client::DoorIsLocked(const std::string& url, const std::string& use
     CURL* curl;
     CURLcode res;
     std::string readBuffer;
-    std::string url_plus_prefix = url + "/door_is_locked";
+    std::string url_plus_prefix = url + "/door_block";
     // Инициализация CURL
     curl = curl_easy_init();
     if(curl) {
@@ -151,6 +151,8 @@ bool network_client::DoorIsLocked(const std::string& url, const std::string& use
         curl_easy_setopt(curl, CURLOPT_USERPWD, userpassword.c_str());
         curl_easy_setopt(curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
         
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
         // Выполнение запроса
         res = curl_easy_perform(curl);
         
@@ -174,11 +176,12 @@ bool network_client::DoorIsLocked(const std::string& url, const std::string& use
             std::stringstream ss;
             ss << readBuffer;
             std::string tmp = ss.str();
-            if (tmp.find("true") == std::string::npos){
-                return false;
+            auto res =  tmp.find("true");
+            if (res != std::string::npos){
+                return true;
             }
             else{
-                return true;
+                return false;
             }
         }
         else{
