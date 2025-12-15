@@ -1,3 +1,4 @@
+
 #include "elevator_control.h"
 
 using namespace elevator_control;
@@ -94,14 +95,7 @@ void ElevatorControl::SendTransportPackage_RoutineAssignment(){
             if (stop_flag_sender_.load()) {
                 break;
             }
-            
-            try {
-              ReadAndDeleteFilesByMask("tranport_package_");
-            } catch (const std::exception& e) {
-                std::cerr << "Ошибка при создании или отправке транспортного пакета: " << e.what() << std::endl;
-            } catch (...) {
-                std::cerr << "Неизвестная ошибка при создании или отправке транспортного пакета" << std::endl;
-            }
+            ReadAndDeleteFilesByMask("tranport_package_");
             // Ждем 10 минут
             std::this_thread::sleep_for(600s);
         } });
@@ -135,7 +129,11 @@ void ElevatorControl::ReadAndDeleteFilesByMask(const std::string& mask) {
                                            std::istreambuf_iterator<char>());
                         file.close();
                         
-                        network_client::SendTransportPackage(GetSettings().server_address,content,GetSettings().userpassword);
+                        std::string error_message;
+                        network_client::SendTransportPackage(GetSettings().server_address,content,GetSettings().userpassword, error_message);
+                        if (!error_message.empty()) {
+                            log4cpp::Category::getRoot() << log4cpp::Priority::ERROR << "Error in SendTransportPackage: " << error_message;
+                        }
                         
                         // Удаляем файл
                         if (std::filesystem::remove(entry.path())) {
@@ -178,15 +176,14 @@ void ElevatorControl::GetDoorIsLock_RoutineAssignment(){
                 break;
             }
             
-            try {
-                bool door_locked = network_client::DoorIsLocked(settings.server_address, settings.userpassword);
-                // Сохраняем результат в переменную
-                door_lock_status_ = door_locked;
-            } catch (const std::exception& e) {
-                std::cerr << "Ошибка при получении статуса блокировки двери: " << e.what() << std::endl;
-            } catch (...) {
-                std::cerr << "Неизвестная ошибка при получении статуса блокировки двери" << std::endl;
+            std::string error_message;
+            bool door_locked = network_client::DoorIsLocked(settings.server_address, settings.userpassword, error_message);
+            if (!error_message.empty()) {
+                log4cpp::Category::getRoot() << log4cpp::Priority::ERROR << "Error in DoorIsLocked: " << error_message;
             }
+            // Сохраняем результат в переменную
+            door_lock_status_ = door_locked;
+
             // Ждем 10 минут
             std::this_thread::sleep_for(30s);
         } });
@@ -197,9 +194,5 @@ void ElevatorControl::GetDoorIsLock_RoutineAssignment(){
 bool ElevatorControl::IsDoorLocked() const {
     return door_lock_status_;
 }
-
-
-
-
 
 

@@ -9,7 +9,13 @@
 #include "json_reader.h"
 #include "xserial.hpp"
 #include "magic_enum.hpp"
-#include <logit.hpp>
+#include <log4cpp/Category.hh>
+#include <log4cpp/Appender.hh>
+#include <log4cpp/FileAppender.hh>
+#include <log4cpp/OstreamAppender.hh>
+#include <log4cpp/Priority.hh>
+#include <log4cpp/PatternLayout.hh>
+#include <log4cpp/RollingFileAppender.hh>
 
 using namespace std::literals;
 
@@ -28,14 +34,29 @@ using namespace std::literals;
 
 #endif
 
+void InitLog(){
+  // Инициализация log4cpp
+  log4cpp::PatternLayout* layout = new log4cpp::PatternLayout();
+  layout->setConversionPattern("%d [%p] %m%n");
+  
+  log4cpp::Appender* consoleAppender = new log4cpp::OstreamAppender("console", &std::cout);
+  consoleAppender->setLayout(layout);
+  
+  log4cpp::Appender*fileAppender = new log4cpp::RollingFileAppender(
+        "file", "elevator_control.log", 5000000, 1  // 5 МБ, 1 архив
+    );
+  fileAppender->setLayout(layout);
+  
+  log4cpp::Category& root = log4cpp::Category::getRoot();
+  root.setPriority(log4cpp::Priority::INFO);
+  root.addAppender(consoleAppender);
+  root.addAppender(fileAppender);
+}
+
 int main()
 {
 
-  LOGIT_ADD_CONSOLE_DEFAULT();
-  LOGIT_ADD_FILE_LOGGER_DEFAULT();
-  LOGIT_SET_MAX_QUEUE(5);
-  LOGIT_SET_QUEUE_POLICY(LOGIT_QUEUE_DROP_NEWEST);
-
+  InitLog();
   elevator_control::ElevatorControl ec;
   input_reader::InputReader ir;
   jsonreader::JsonReader jr;
@@ -51,7 +72,6 @@ int main()
   ec.GetDoorIsLock_RoutineAssignment();
   
 #if EXTERNAL_DISPLAY
- 
   InitGpio(settings);
   InitDisplay(settings);
   signal(SIGINT, ReleaseWiringRP);
@@ -66,7 +86,12 @@ int main()
                       magic_enum::enum_cast<xserial::ComPort::eStopBit>(settings.scanner_stop_bits).value(),
                       0,
                       settings.scanner_linux_com_port))
+
     {
+      #if EXTERNAL_DISPLAY
+        PrintDisplayText(L"Не удалось подключить сканер штрихкодов. Возможно он не подключен или настроен другой порт. ");
+      #endif
+      log4cpp::Category::getRoot() << log4cpp::Priority::ERROR << "Не удалось подключить сканер штрихкодов. Возможно он не подключен или настроен другой порт.";
       return 1;
     }
   }
@@ -75,23 +100,23 @@ int main()
   {
     jr.FilligBarcodes(ec);
   }
+catch (...)
+{
+  #if EXTERNAL_DISPLAY
+      PrintDisplayText(L"Не возможно прочитать штрихкоды, возможно не верная кодировка файла barcode.json");
+  #endif
 
-  catch (...)
-  {
-    #if EXTERNAL_DISPLAY
-        PrintDisplayText(L"Не возможно прочитать штрихкоды, возможно не верная кодировка файла barcode.json");
-    #endif
+  log4cpp::Category::getRoot() << log4cpp::Priority::ERROR << "Не возможно прочитать штрихкоды, возможно не верная кодировка файла barcode.json";
+  return 1;
+}
 
-    LOGIT_ERROR_THROTTLE(250, "Не возможно прочитать штрихкоды, возможно не верная кодировка файла barcode.json"s);
-    return 1;
-  }
 
   std::string input_string;
   std::string barcode;
+while (true)
+{
+log4cpp::Category::getRoot() << log4cpp::Priority::INFO << "Значение блокировки дверей: " << ec.IsDoorLocked();
 
-  while (true)
-  {
-  LOGIT_INFO("Значение блокировки дверей:"s, ec.IsDoorLocked());
 #if EXTERNAL_DISPLAY
     CheckСonditionDoor(ec);
     if(!ec.IsDoorLocked()){
@@ -135,17 +160,17 @@ int main()
       #if EXTERNAL_DISPLAY
           PrintDisplayText(L"Список пуст, нечего отправлять.");
       #endif
-          LOGIT_INFO("Список пуст, нечего отправлять."s);
+          log4cpp::Category::getRoot() << log4cpp::Priority::INFO << "Список пуст, нечего отправлять.";
           continue;
         }
         try
         {
           std::string name_pack = jr.SaveTransportPackage(ec);
       #if EXTERNAL_DISPLAY
-          LOGIT_INFO("Транспортный пакет записан."s);
+          log4cpp::Category::getRoot() << log4cpp::Priority::INFO << "Транспортный пакет записан.";
           PrintDisplayText(L"Транспортный пакет записан.");
           digitalWrite(settings.pin_unlock_door, HIGH); // Даем возможность нажать на кнопку открытия ворот
-          LOGIT_INFO("Доступ открыт."s);
+          log4cpp::Category::getRoot() << log4cpp::Priority::INFO << "Доступ открыт.";
           PrintDisplayText(L"Доступ открыт", settings.time_unlock_door);
           digitalWrite(settings.pin_unlock_door, LOW); // Выключаем кнопку открытия ворот
           digitalWrite(settings.pin_close_door, HIGH); // Закрываем ворота.
@@ -153,7 +178,7 @@ int main()
           digitalWrite(settings.pin_close_door, LOW);
 
       #endif
-          LOGIT_INFO("Транспортный пакет записан."s, name_pack);
+          log4cpp::Category::getRoot() << log4cpp::Priority::INFO << "Транспортный пакет записан." << name_pack;
           continue;
         }
         catch (...)
@@ -161,7 +186,7 @@ int main()
       #if EXTERNAL_DISPLAY
           PrintDisplayText(L"Ошибка при записи транспортного пакета в файл");
       #endif
-          LOGIT_ERROR_THROTTLE(250, "Ошибка при записи транспортного пакета в файл."s);
+          log4cpp::Category::getRoot() << log4cpp::Priority::ERROR << "Ошибка при записи транспортного пакета в файл."s;
         }
       }
       else
@@ -175,21 +200,21 @@ int main()
           auto text_wstring = Utf8ToWchar(tmp_string.c_str());
           PrintDisplayText(text_wstring.c_str());
       #endif
-          LOGIT_INFO("Переданный файл"s, name_product.value());
+          log4cpp::Category::getRoot() << log4cpp::Priority::INFO << "Переданный файл:" << name_product.value();
         }
         else
         {
       #if EXTERNAL_DISPLAY
           PrintDisplayText(L"Неопознанный штрихкод");
       #endif
-          LOGIT_INFO("Транспортный пакет записан.");
+          log4cpp::Category::getRoot() << log4cpp::Priority::INFO << "Транспортный пакет записан.";
         }
         ec.AddBarcodeToSend(input_string);
       }
     }
     catch (const std::exception &e)
     {
-      LOGIT_ERROR_THROTTLE(250, e.what());
+      log4cpp::Category::getRoot() << log4cpp::Priority::ERROR <<  e.what(); 
     }
   }
 

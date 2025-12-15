@@ -1,3 +1,5 @@
+#include <log4cpp/Category.hh>
+#include <log4cpp/Priority.hh>
 #include "json_reader.h"
 #include <curl/curl.h>
 #include <iostream>
@@ -14,42 +16,56 @@ void JsonReader::FilligBarcodes(elevator_control::ElevatorControl &ec)
 {
   using namespace std::literals;
 
-  // Открываем файл обмена, путь к которому указан в настройках
-  std::ifstream input_json;
-  input_json.open("barcode.json", std::ios::binary);
-  if (!input_json.good())
-  {
-    throw std::runtime_error("Не возможно прочитать файл штрихкодов barcode.json");
-  }
-
-  // Загружаем и парсим JSON документ
-  json::Document doc = json::Load(input_json);
-  json::Array arr = doc.GetRoot().AsArray();
-
-  // Переменные для хранения текущего штрихкода и названия продукта
-  std::string barcode;
-  std::string name_product;
-
-  // Проходим по каждому элементу массива (каждый элемент - это объект с данными о продукте)
-  for (const auto &elem : arr)
-  {
-    // Проходим по ключам объекта
-    for (const auto &[key, value] : elem.AsMap())
-    {
-      // Если ключ "barcode", сохраняем значение
-      if (key == "barcode"s)
+  try{
+      // Открываем файл обмена, путь к которому указан в настройках
+      std::ifstream input_json;
+      input_json.open("barcode.json", std::ios::binary);
+      if (!input_json.good())
       {
-        barcode = value.AsString();
+        throw std::runtime_error("Не возможно прочитать файл штрихкодов barcode.json");
       }
-      // Если ключ "name_product", сохраняем значение
-      if (key == "name_product"s)
+
+      // Загружаем и парсим JSON документ
+      json::Document doc = json::Load(input_json);
+      json::Array arr = doc.GetRoot().AsArray();
+
+      // Переменные для хранения текущего штрихкода и названия продукта
+      std::string barcode;
+      std::string name_product;
+
+      // Проходим по каждому элементу массива (каждый элемент - это объект с данными о продукте)
+      for (const auto &elem : arr)
       {
-        name_product = value.AsString();
+        // Проходим по ключам объекта
+        for (const auto &[key, value] : elem.AsMap())
+        {
+          // Если ключ "barcode", сохраняем значение
+          if (key == "barcode"s)
+          {
+            barcode = value.AsString();
+          }
+          // Если ключ "name_product", сохраняем значение
+          if (key == "name_product"s)
+          {
+            name_product = value.AsString();
+          }
+        }
+        // Добавляем найденную пару (название продукта, штрихкод) в систему управления лифтом
+        ec.AddBarcode(name_product, barcode);
       }
-    }
-    // Добавляем найденную пару (название продукта, штрихкод) в систему управления лифтом
-    ec.AddBarcode(name_product, barcode);
+}
+  catch (std::logic_error e)
+  {
+    log4cpp::Category::getRoot() << log4cpp::Priority::ERROR << "Ошибка при разборе JSON:" << e.what();
   }
+  catch (json::ParsingError e)
+  {
+    log4cpp::Category::getRoot() << log4cpp::Priority::ERROR << "Ошибка при разборе JSON:" << e.what();
+  }
+   catch(...){
+     log4cpp::Category::getRoot() << log4cpp::Priority::ERROR << "Неизвестная ошибка";
+   }
+
 }
 
 /**
@@ -230,18 +246,15 @@ void JsonReader::StartBackgroundDownloadBarcode(elevator_control::ElevatorContro
             if (stop_flag_barcode_.load()) {
                 break;
             }
-            try { 
-                // Получаем штрихкоды
-                network_client::DownloadBarcodeJsonData(settings.server_address, "barcode.json", settings.userpassword);
-            } catch (const std::exception& e) {
-                throw std::runtime_error("Ошибка при сохранении файла barcode.json");
-            } catch (...) {
-                throw std::runtime_error("Неизвестная ошибка при сохранения файла barcode.json");
+            std::string error_message;
+            network_client::DownloadBarcodeJsonData(settings.server_address, "barcode.json", settings.userpassword, error_message);
+            if (!error_message.empty()) {
+                log4cpp::Category::getRoot() << log4cpp::Priority::ERROR << "Error in DownloadBarcodeJsonData: " << error_message;
             }
             // Ждем 60 минут
             std::this_thread::sleep_for(6000s);
         } });
-}
+      }
 
 /**
  * @brief Создает и сохраняет транспортный пакет с штрихкодами в JSON-файл.

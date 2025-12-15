@@ -24,7 +24,7 @@ static size_t WriteCallback(char *contents, size_t size, size_t nmemb, void *use
     return total_size;
 }
 
-bool network_client::DownloadBarcodeJsonData(const std::string& url, const std::string& filename, const std::string& userpassword) {
+bool network_client::DownloadBarcodeJsonData(const std::string& url, const std::string& filename, const std::string& userpassword, std::string& error_message) {
     CURL* curl;
     CURLcode res;
     std::string readBuffer;
@@ -50,10 +50,9 @@ bool network_client::DownloadBarcodeJsonData(const std::string& url, const std::
          
         // Проверка результата
         if(res != CURLE_OK) {
-            std::stringstream ss;
-            ss << "Ошибка при выполнении запроса: " << curl_easy_strerror(res);
-            throw std::runtime_error(ss.str());
-         
+            std::stringstream error_stream;
+            error_stream << "Ошибка при загрузке файла штрихкодов: " << curl_easy_strerror(res);
+            error_message = error_stream.str();
             return false;
         }
 
@@ -64,19 +63,19 @@ bool network_client::DownloadBarcodeJsonData(const std::string& url, const std::
         {
             std::ofstream outFile(filename);
             if (!outFile.is_open()) {
-                std::stringstream ss;
-                ss << "Ошибка при открытии файла для записи: " << filename;
-                throw std::runtime_error(ss.str());
+                 std::stringstream error_stream;
+                 error_stream << "Ошибка при открытии файла для записи файла штрихкодов: " << filename ;
+                 error_message = error_stream.str();
                 return false;
             }
             outFile << readBuffer;
-            outFile.close();  
+            outFile.close();
             return true;
         }
         else{
-            std::stringstream ss;
-            ss << "Ошибка при выполнении запроса. Код ответа: " << http_code;
-            throw std::runtime_error(ss.str());
+             std::stringstream error_stream;
+             error_stream << "Ошибка при скачвании файла штрихкодов. Код ответа: " << http_code ;
+             error_message = error_stream.str();
         }
     }
         
@@ -94,7 +93,7 @@ bool network_client::DownloadBarcodeJsonData(const std::string& url, const std::
  * @param data данные транспортного пакета json/xml
  * @param userpassword имя пользователя/пароль
  */
-bool network_client::SendTransportPackage(const std::string& url, const std::string& data, const std::string& userpassword) {
+bool network_client::SendTransportPackage(const std::string& url, const std::string& data, const std::string& userpassword, std::string& error_message) {
     CURL* curl;
     CURLcode res;
     std::string response_string;
@@ -120,13 +119,16 @@ bool network_client::SendTransportPackage(const std::string& url, const std::str
 
         // Check for errors
         if (res != CURLE_OK) {
-            std::cerr << "curl_easy_perform() ошибка: " << curl_easy_strerror(res) << std::endl;
+            std::stringstream error_stream;
+            error_stream << "Ошибка при отправке транспортного пакета: " << curl_easy_strerror(res);
+            error_message = error_stream.str();
             return false;
         } else {
             long http_code = 0;
             curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
-            std::cout << "Код ответа: " << http_code << std::endl;
-            std::cout << "Ответ: " << response_string << std::endl;
+            std::stringstream response_info;
+            response_info << "Код ответа: " << http_code << std::endl;
+            response_info << "Ответ: " << response_string ;
             if(http_code != 200) {
                 return false;
             }
@@ -138,7 +140,7 @@ bool network_client::SendTransportPackage(const std::string& url, const std::str
     return false;
 }
 
-bool network_client::DoorIsLocked(const std::string& url, const std::string& userpassword) {
+bool network_client::DoorIsLocked(const std::string& url, const std::string& userpassword, std::string& error_message) {
     CURL* curl;
     CURLcode res;
     std::string readBuffer;
@@ -161,10 +163,9 @@ bool network_client::DoorIsLocked(const std::string& url, const std::string& use
   
         // Проверка результата
         if(res != CURLE_OK) {
-            std::stringstream ss;
-            ss << "Ошибка при выполнении запроса: " << curl_easy_strerror(res);
-            throw std::runtime_error(ss.str());
-         
+            std::stringstream error_stream;
+            error_stream << "Ошибка при получении статуса блокировки: " << curl_easy_strerror(res);
+            error_message = error_stream.str();
             return false;
         }
 
@@ -185,9 +186,9 @@ bool network_client::DoorIsLocked(const std::string& url, const std::string& use
             }
         }
         else{
-            std::stringstream ss;
-            ss << "Ошибка при выполнении запроса. Код ответа: " << http_code;
-            throw std::runtime_error(ss.str());
+            std::stringstream error_stream;
+            error_stream << "Ошибка при получении статуса блокировки. Код ответа: " << http_code;
+            error_message = error_stream.str();
         }
     }
         

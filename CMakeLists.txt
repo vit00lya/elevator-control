@@ -4,8 +4,6 @@ project(ElevatorControl)
 set(CMAKE_CXX_STANDARD 17)
 set(TARGET ElevatorControl)
 
-include(CPM.cmake)
-
 # Find libcurl
 find_package(CURL REQUIRED)
 
@@ -25,7 +23,7 @@ list(APPEND SOURCES
 	src/magic_enum.hpp
 	src/main.cpp
 	src/network_client.cpp
-	src/network_client.h) 
+	src/network_client.h)
 
 if(EXTERNAL_DISPLAY)
 	list(PREPEND SOURCES 
@@ -36,11 +34,7 @@ if(EXTERNAL_DISPLAY)
 endif()
 
 add_executable(${TARGET} ${SOURCES})
-target_link_libraries(${TARGET} PRIVATE CURL::libcurl) 
-
-target_include_directories(${TARGET} PRIVATE
-	target_include_directories(${TARGET} PRIVATE "/usr/local/include/logit_cpp/")
-)
+target_link_libraries(${TARGET} PRIVATE CURL::libcurl log4cpp)
 
 if(EXTERNAL_DISPLAY)
 	add_subdirectory(../WiringRP ${CMAKE_BINARY_DIR}/wrp)

@@ -181,7 +181,7 @@ Node LoadString(istream& input) {
                     break;
                 default:
                     // Встретили неизвестную escape-последовательность
-                    throw ParsingError("Unrecognized escape sequence \\"s + escaped_char);
+                    throw ParsingError("Unrecognized escape sequence \\"s + escaped_char  + " Строка:" + s);
             }
         } else if (ch == '\n' || ch == '\r') {
             // Строковый литерал внутри- JSON не может прерываться символами \r или \n

@@ -15,6 +15,8 @@
 #include <filesystem>
 #include <regex>
 #include "network_client.h"
+#include <log4cpp/Category.hh>
+#include <log4cpp/Priority.hh>
 
 namespace elevator_control{
 
