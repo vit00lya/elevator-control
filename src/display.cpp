@@ -23,8 +23,30 @@ std::wstring Utf8ToWchar(const char* utf8_str) {
  * @param lines Вектор строк для вывода
  */
 void PrintLines(std::vector<std::wstring>& lines){
-  for (size_t i = 0; i < lines.size() && i < MAX_LINES; ++i){
-    writeString(0, 5 + HEIGHT_LINE * i, lines[i].c_str(), System5x7R);
+  size_t line_index = 0;
+  for (const auto& line : lines) {
+    // Разделяем строку по символу новой строки
+    size_t start = 0;
+    size_t end = line.find(L'\n');
+    
+    while (end != std::wstring::npos && line_index < MAX_LINES) {
+      std::wstring sub_line = line.substr(start, end - start);
+      writeString(0, 5 + HEIGHT_LINE * line_index, sub_line.c_str(), System5x7R);
+      ++line_index;
+      start = end + 1;
+      end = line.find(L'\n', start);
+    }
+    
+    // Выводим оставшуюся часть строки (или всю строку, если \n не найден)
+    if (line_index < MAX_LINES) {
+      std::wstring sub_line = line.substr(start);
+      writeString(0, 5 + HEIGHT_LINE * line_index, sub_line.c_str(), System5x7R);
+      ++line_index;
+    }
+    
+    if (line_index >= MAX_LINES) {
+      break;
+    }
   }
 }
 
@@ -35,23 +57,59 @@ void PrintLines(std::vector<std::wstring>& lines){
  * @return std::vector<std::wstring> Вектор подстрок
  */
 std::vector<std::wstring> GetStrings(const std::wstring& str){
-
   std::vector<std::wstring> result;
   
-  if(str.size() < MAX_CHARS_PER_LINE){
-    result.push_back(str);
+  // Разделяем строку по символу новой строки
+  size_t start = 0;
+  size_t end = str.find(L'\n');
+  
+  while (end != std::wstring::npos) {
+    std::wstring line = str.substr(start, end - start);
+    
+    // Разбиваем длинные строки на части
+    if (line.size() <= MAX_CHARS_PER_LINE) {
+      result.push_back(line);
+    } else {
+      size_t iter_count = line.size() / MAX_CHARS_PER_LINE + 1;
+      size_t remaining_characters = line.size();
+      for(size_t i = 0; i < iter_count && result.size() < MAX_LINES; ++i) {
+        size_t end_line = std::min(MAX_CHARS_PER_LINE, remaining_characters);
+        result.push_back(line.substr(MAX_CHARS_PER_LINE * i, end_line));
+        remaining_characters -= MAX_CHARS_PER_LINE;
+        if (remaining_characters <= 0) break;
+      }
+    }
+    
+    start = end + 1;
+    end = str.find(L'\n', start);
+    
+    if (result.size() >= MAX_LINES) break;
   }
-  else{
-
-    size_t iter_count = str.size() /  MAX_CHARS_PER_LINE + 1;
-    size_t remaining_characters = str.size();
-    for(size_t i = 0; i < iter_count; ++i) {
-      size_t end_line = std::min(MAX_CHARS_PER_LINE,remaining_characters);
-      result.push_back(str.substr(MAX_CHARS_PER_LINE * i, end_line));
-      remaining_characters -= MAX_CHARS_PER_LINE - 1;
-      
+  
+  // Обрабатываем оставшуюся часть строки (или всю строку, если \n не найден)
+  if (result.size() < MAX_LINES) {
+    std::wstring line = str.substr(start);
+    
+    // Разбиваем длинные строки на части
+    if (line.size() <= MAX_CHARS_PER_LINE) {
+      result.push_back(line);
+    } else {
+      size_t iter_count = line.size() / MAX_CHARS_PER_LINE + 1;
+      size_t remaining_characters = line.size();
+      for(size_t i = 0; i < iter_count && result.size() < MAX_LINES; ++i) {
+        size_t end_line = std::min(MAX_CHARS_PER_LINE, remaining_characters);
+        result.push_back(line.substr(MAX_CHARS_PER_LINE * i, end_line));
+        remaining_characters -= MAX_CHARS_PER_LINE;
+        if (remaining_characters <= 0) break;
+      }
     }
   }
+  
+  // Ограничиваем количество строк до MAX_LINES
+  if (result.size() > MAX_LINES) {
+    result.resize(MAX_LINES);
+  }
+  
   return result;
 }
 
@@ -59,16 +117,28 @@ std::vector<std::wstring> GetStrings(const std::wstring& str){
  * @brief Выводит текст на дисплей с возможностью ожидания
  * 
  * @param str Текст для вывода
- * @param wait Флаг, указывающий, нужно ли ждать после вывода (по умолчанию true)
+ * @param wait время задержки при выводе сообщения
+ * @param countdown если true, то выводится обратный отсчет
  */
-void PrintDisplayText(const std::wstring& str, long wait){
-  
-  clearScreen();
-  std::vector<std::wstring> lines = GetStrings(str);
-  PrintLines(lines);
-  syncBuffer();
+void PrintDisplayText(const std::wstring& str, long wait, bool countdown){
   if(wait != 0){
-    delay(wait * 1000);
+    if (countdown) { 
+      for(long long time_wait = 0; time_wait < wait; ++time_wait) {
+        clearScreen();
+        const std::wstring tmp_str = str + L"\nОсталось: " + std::to_wstring(wait - time_wait) + L" сек";
+        std::vector<std::wstring> updated_lines = GetStrings(tmp_str);
+        PrintLines(updated_lines);
+        syncBuffer();
+        delay(1000);
+      }
+    }
+    else{
+        clearScreen();
+        std::vector<std::wstring> lines = GetStrings(str);
+        PrintLines(lines);
+        syncBuffer();
+        delay(1000 * wait);
+    }
   }
 }
 

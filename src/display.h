@@ -11,6 +11,6 @@
 std::wstring Utf8ToWchar(const char* utf8_str);
 void PrintLines(std::vector<std::wstring>& lines);
 std::vector<std::wstring> GetStrings(const std::wstring& str);
-void PrintDisplayText(const std::wstring& str, long wait = 3);
+void PrintDisplayText(const std::wstring& str, long wait = 3, bool countdown = false);
 void InitDisplay(elevator_control::Settings& settings);
-void ReleaseWiringRP(int sig);
+void ReleaseWiringRP(int sig); 

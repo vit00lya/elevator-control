@@ -3,3 +3,4 @@ build
 src/#json_reader.cpp#
 src/#json.cpp#
 hat_repka_pi-backups
+.cache

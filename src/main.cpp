@@ -34,6 +34,8 @@ using namespace std::literals;
 
 #endif
 
+long amount_data_read = 0;
+
 void InitLog(){
   // Инициализация log4cpp
   log4cpp::PatternLayout* layout = new log4cpp::PatternLayout();
@@ -109,8 +111,6 @@ catch (...)
   log4cpp::Category::getRoot() << log4cpp::Priority::ERROR << "Не возможно прочитать штрихкоды, возможно не верная кодировка файла barcode.json";
   return 1;
 }
-
-
   std::string input_string;
   std::string barcode;
 while (true)
@@ -120,16 +120,16 @@ log4cpp::Category::getRoot() << log4cpp::Priority::INFO << "Значение б�
 #if EXTERNAL_DISPLAY
     CheckСonditionDoor(ec);
     if(!ec.IsDoorLocked()){
-      delay(5*60*1000);
+      delay(30*1000);
       continue;
     }
-    PrintDisplayText(L"Введите штрихкод");
+    PrintDisplayText(L"Введите штрихкод \nКоличество штрих.: " + std::to_wstring(amount_data_read));
 #endif
     input_string = ""s;
     
     // Таймер для прерывания ввода
     auto start_time = std::chrono::steady_clock::now();
-    const auto timeout = std::chrono::seconds(600); // Таймаут 30 секунд
+    const auto timeout = std::chrono::seconds(30); 
     
     if (settings.scanner_enable)
     {
@@ -147,9 +147,8 @@ log4cpp::Category::getRoot() << log4cpp::Priority::INFO << "Значение б�
       std::cout << "Введите штрихкод: ";
       std::cin >> input_string;
     }
-
+    ++amount_data_read;
     if(input_string == ""s) continue;
-
     try
     {
       barcode = ir.ParseLine(input_string);
@@ -161,24 +160,27 @@ log4cpp::Category::getRoot() << log4cpp::Priority::INFO << "Значение б�
           PrintDisplayText(L"Список пуст, нечего отправлять.");
       #endif
           log4cpp::Category::getRoot() << log4cpp::Priority::INFO << "Список пуст, нечего отправлять.";
+          amount_data_read = 0;
           continue;
         }
+  
         try
         {
           std::string name_pack = jr.SaveTransportPackage(ec);
       #if EXTERNAL_DISPLAY
           log4cpp::Category::getRoot() << log4cpp::Priority::INFO << "Транспортный пакет записан.";
           PrintDisplayText(L"Транспортный пакет записан.");
-          digitalWrite(settings.pin_unlock_door, HIGH); // Даем возможность нажать на кнопку открытия ворот
+          digitalWrite(settings.pin_unlock_door, LOW); // Даем возможность нажать на кнопку открытия ворот
           log4cpp::Category::getRoot() << log4cpp::Priority::INFO << "Доступ открыт.";
-          PrintDisplayText(L"Доступ открыт", settings.time_unlock_door);
-          digitalWrite(settings.pin_unlock_door, LOW); // Выключаем кнопку открытия ворот
+          PrintDisplayText(L"Доступ открыт", settings.time_unlock_door, true);
+          PrintDisplayText(L"Закрытие ворот");
           digitalWrite(settings.pin_close_door, HIGH); // Закрываем ворота.
-          delay(1000);
+          delay(16*1000);
           digitalWrite(settings.pin_close_door, LOW);
-
+          digitalWrite(settings.pin_unlock_door, HIGH); // Выключаем кнопку открытия ворот
       #endif
           log4cpp::Category::getRoot() << log4cpp::Priority::INFO << "Транспортный пакет записан." << name_pack;
+          amount_data_read = 0;
           continue;
         }
         catch (...)
@@ -188,6 +190,20 @@ log4cpp::Category::getRoot() << log4cpp::Priority::INFO << "Значение б�
       #endif
           log4cpp::Category::getRoot() << log4cpp::Priority::ERROR << "Ошибка при записи транспортного пакета в файл."s;
         }
+        amount_data_read = 0;
+      }
+      else if(barcode == "9999999999998"sv){
+        #if EXTERNAL_DISPLAY
+          digitalWrite(settings.pin_unlock_door, LOW); // Даем возможность нажать на кнопку открытия ворот
+          log4cpp::Category::getRoot() << log4cpp::Priority::INFO << "Аварийный доступ к воротам.";
+          PrintDisplayText(L"Доступ открыт", 60, true);
+          PrintDisplayText(L"Закрытие ворот");
+          digitalWrite(settings.pin_close_door, HIGH); // Закрываем ворота.
+          delay(16*1000);
+          digitalWrite(settings.pin_close_door, LOW);
+          digitalWrite(settings.pin_unlock_door, HIGH); // Выключаем кнопку открытия ворот
+        #endif
+        amount_data_read = 0;
       }
       else
       {
@@ -200,7 +216,7 @@ log4cpp::Category::getRoot() << log4cpp::Priority::INFO << "Значение б�
           auto text_wstring = Utf8ToWchar(tmp_string.c_str());
           PrintDisplayText(text_wstring.c_str());
       #endif
-          log4cpp::Category::getRoot() << log4cpp::Priority::INFO << "Переданный файл:" << name_product.value();
+          log4cpp::Category::getRoot() << log4cpp::Priority::INFO << "Записанный товар:" << name_product.value();
         }
         else
         {
